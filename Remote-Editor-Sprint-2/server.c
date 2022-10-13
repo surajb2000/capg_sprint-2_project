@@ -53,102 +53,102 @@ int main() {
         SendDataToClient(clientfd, "Connected to server");
         printf("Client Connected");
         // create child process
-        pid_t pid = fork();
-        if (pid < 0) {
-            perror("fork");
-            exit(EXIT_FAILURE);
-        }
+        // pid_t pid = fork();
+        // if (pid < 0) {
+        //     perror("fork");
+        //     exit(EXIT_FAILURE);
+        // }
 
-        else if (pid == 0) {
-            // receive data from client
-            char *data = ReceiveDataFromClient(clientfd, &server);
-            char *command, *name, *password, *dir, *filename;
-            char *token = strtok(data, " ");
-            strcpy(command, token);
-            strtok(NULL, " ");
-            strcpy(password, token);
-            strtok(NULL, " ");
-            strcpy(dir, token);
-            strtok(NULL, " ");
-            strcpy(filename, token);
+        // else if (pid == 0) {
+        //  receive data from client
+        char data[100] = "";
+        strcpy(data, ReceiveDataFromClient(clientfd, &server));
+        char command[100] = "", name[100] = "", password[100] = "", dir[100] = "", filename[100] = "";
+        char *token = strtok(data, " ");
+        strcpy(command, token);
+        token = strtok(NULL, " ");
+        strcpy(name, token);
+        token = strtok(NULL, " ");
+        strcpy(password, token);
 
-            user current_user = User(name, password);
+        user current_user;
+        User(name, password, &current_user);
 
-            /*
-             * AUTHENTICATE current_user
-             */
-            if (AuthenticateUser(clientfd, &current_user, &server)) {
-                while (1) {
-                    /*
-                     * clear the buffer
-                     */
+        /*
+         * AUTHENTICATE current_user
+         */
+        if (AuthenticateUser(clientfd, &current_user, &server)) {
+            while (1) {
+                /*
+                 * clear the buffer
+                 */
 
-                    strcpy(data, "");
-                    dir = GetDir(&current_user);
+                strcpy(data, "");
+                strcpy(dir, current_user.dir);
 
-                    /*
-                     * Receive request from the client
-                     */
+                /*
+                 * Receive request from the client
+                 */
 
-                    data = ReceiveDataFromClient(clientfd, &server);
-                    token = strtok(data, " ");
-                    strcpy(command, token);
+                strcpy(data, ReceiveDataFromClient(clientfd, &server));
+                token = strtok(data, " ");
+                strcpy(command, token);
 
-                    /*
-                     * Command List
-                     * Ls
-                     * cd
-                     * edit
-                     * view
-                     * select
-                     * bye
-                     */
+                /*
+                 * Command List
+                 * Ls
+                 * cd
+                 * edit
+                 * view
+                 * select
+                 * bye
+                 */
 
-                    if (command == "ls") {
-                        ListDirContents(clientfd, dir);
-                    } else if (command == "pwd") {
-                        SendDataToClient(clientfd, dir);
-                    } else if (command == "cd") {
-                        char *new_dir;
-                        token = strtok(NULL, " ");
-                        strcpy(new_dir, token);
-                        // ChangeDir(new_dir, current_user, clientfd);
-                        // } else if (command == "edit") {
-                        //     int line_number;
-                        //     ss >> line_number;
-                        //     if (filename.empty())
-                        //         server.SendDataToClient(clientfd, "0");
-                        //     else
-                        //         server.EditLine(clientfd, filename, line_number);
-                        // } else if (command == "print") {
-                        //     if (filename.empty())
-                        //         server.SendDataToClient(clientfd, "0");
-                        //     else {
-                        //         int start_line = 1, end_line = -1;
-                        //         ss >> start_line >> end_line;
-                        //         server.ViewFile(clientfd, filename, start_line, end_line);
-                        //     }
-                        // } else if (command == "select") {
-                        //     ss >> filename;
-                        //     if (!filename.empty())
-                        //         server.SelectFile(filename, dir, clientfd);
-                    } else if (command == "bye") {
-                        close(clientfd);
-                        break;
-                    } else {
-                        SendDataToClient(clientfd, "Invalid command");
-                    }
+                if (strcmp(command, "ls") == 0) {
+                    ListDirContents(clientfd, dir);
+                } else if (strcmp(command, "pwd") == 0) {
+                    SendDataToClient(clientfd, dir);
+                } else if (strcmp(command, "cd") == 0) {
+                    char *new_dir;
+                    token = strtok(NULL, " ");
+                    strcpy(new_dir, token);
+                    // ChangeDir(new_dir, current_user, clientfd);
+                    // } else if (command == "edit") {
+                    //     int line_number;
+                    //     ss >> line_number;
+                    //     if (filename.empty())
+                    //         server.SendDataToClient(clientfd, "0");
+                    //     else
+                    //         server.EditLine(clientfd, filename, line_number);
+                    // } else if (command == "print") {
+                    //     if (filename.empty())
+                    //         server.SendDataToClient(clientfd, "0");
+                    //     else {
+                    //         int start_line = 1, end_line = -1;
+                    //         ss >> start_line >> end_line;
+                    //         server.ViewFile(clientfd, filename, start_line, end_line);
+                    //     }
+                    // } else if (command == "select") {
+                    //     ss >> filename;
+                    //     if (!filename.empty())
+                    //         server.SelectFile(filename, dir, clientfd);
+                } else if (strcmp(command, "bye") == 0) {
+                    close(clientfd);
+                    break;
+                } else {
+                    SendDataToClient(clientfd, "Invalid command");
                 }
             }
-        } else {
-            /*
-             * inside parent process
-             * SIGCHLD is sent to the parent process when a child process exits.
-             * closing the socket.
-             */
-            signal(SIGCHLD, SIG_IGN);
-            close(clientfd);
         }
+        // } else {
+        //     /*
+        //      * inside parent process
+        //      * SIGCHLD is sent to the parent process when a child process exits.
+        //      * closing the socket.
+        //      */
+        //     signal(SIGCHLD, SIG_IGN);
+        //     close(clientfd);
+        //}
     }
     return 0;
 }

@@ -12,7 +12,7 @@ typedef struct User {
     char dir[100];
 } user;
 
-user User(const char *name, const char *password);
+void User(const char *name, const char *password,user *);
 int ChangeUserDir(user *u,const char *new_dir);
 char *GetDir();
 // bool operator==(const User &user);

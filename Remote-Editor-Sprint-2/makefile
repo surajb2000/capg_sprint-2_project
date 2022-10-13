@@ -1,7 +1,15 @@
-s:
-	gcc server.c -o s
-	./s
+server:
+	gcc server.c serverFunctions.c user.c -o bin/server.out -g
+	
+run s:
+	./bin/server.out
 
-c:
-	gcc client.c -o c
-	./c
+test s:
+	gdb ./bin/server.out
+	
+client:
+	gcc client.c clientFunctions.c -o bin/client.out -g
+	./bin/client.out
+
+clean : 
+	rm -rf ./bin/*

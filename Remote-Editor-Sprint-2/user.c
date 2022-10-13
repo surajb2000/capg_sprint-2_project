@@ -8,12 +8,13 @@
 /*
  * Constructor for the user class.
  */
-user User(const char *name, const char *password) {
+void User(const char *name, const char *password,user *u) {
     char dir[100] = "";
     strcpy(dir, DIR);
     strcat(dir, name);
-    user u = {.dir = dir, .name = name, .password = password};
-    return u;
+    strcpy(u->dir,dir);
+    strcpy(u->name,name);
+    strcpy(u->password,password);
 }
 
 /*
@@ -38,9 +39,9 @@ int ChangeUserDir(user *u, const char *dir) {
 /*
  * Returns the directory of the user.
  */
-char *GetDir(user *u) {
-    return u->dir;
-}
+// char *GetDir(user *u) {
+//     return u->dir;
+// }
 
 // /*
 //  * overloading == operator to compare two users.

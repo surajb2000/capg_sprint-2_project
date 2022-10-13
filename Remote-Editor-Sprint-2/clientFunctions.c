@@ -67,7 +67,7 @@ char *ReceiveDataFromServer(c *c) {
         exit(EXIT_FAILURE);
     }
     /* display data to stdout */
-    printf("%s", c->buffer);
+    printf("%s\n", c->buffer);
     // std::cout << buffer << std::endl;
     return c->buffer;
 }
@@ -99,7 +99,7 @@ int AuthenticateUser(char *username, char *password, c *c) {
     }
 
     /* check whether the user is authenticated */
-    if (strcmp(c->buffer, "AUTHENTICATED"))
+    if (strcmp(c->buffer, "AUTHENTICATED")==0)
         return 1;
     c->isConnected = 0;
     return 0;

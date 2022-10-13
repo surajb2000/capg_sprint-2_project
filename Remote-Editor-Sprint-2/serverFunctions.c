@@ -20,6 +20,10 @@ int createServer(ser *ser) {
     ser->n = 0;
     /* create socket */
     ser->socketfd = socket(AF_INET, SOCK_STREAM, 0);
+    // ser->socketfd = socket(AF_INET, SO_REUSEADDR, 0);
+    int enable = 1;
+    setsockopt(ser->socketfd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(enable));
+
     if (ser->socketfd == -1) {
         /* display error to stderr */
         perror("socket");
@@ -43,6 +47,9 @@ int createServer(ser *ser) {
         perror("listen");
         exit(EXIT_FAILURE);
     }
+    strcpy(ser->users[ser->n].name, "anonymous");
+    strcpy(ser->users[ser->n].password, "password");
+    ser->n += 1;
 }
 
 int LoadUsersData(ser *ser) {
@@ -67,9 +74,9 @@ int LoadUsersData(ser *ser) {
         strcpy(password, token);
         token = strtok(NULL, " ");
         strcpy(dir, token);
-        
-        strcpy(ser->users[ser->n].name,name);
-        strcpy(ser->users[ser->n].password,password);
+
+        strcpy(ser->users[ser->n].name, name);
+        strcpy(ser->users[ser->n].password, password);
     }
     fclose(file);
     return 0;
@@ -135,11 +142,11 @@ int SendDataToClient(int client_socketfd, const char *data) {
  * It is responsible for checking if the client is blacklisted or not.
  */
 
-int AuthenticateUser(int client_socketfd, const user *current_user,ser *ser) {
+int AuthenticateUser(int client_socketfd, const user *current_user, ser *ser) {
     /* check whether user is present in users vector */
     int n = ser->n;
     for (int i = 0; i < n; i++) {
-        if (ser->users[i].name == current_user->name && ser->users[i].password == current_user->password) {
+        if (strcmp(ser->users[i].name, current_user->name) == 0 && strcmp(ser->users[i].password, current_user->password) == 0) {
             /* send success message to client */
             send(client_socketfd, "AUTHENTICATED", strlen("AUTHENTICATED"), 0);
             return 1;
