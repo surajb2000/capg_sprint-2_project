@@ -9,7 +9,7 @@
 #include <sys/types.h>
 #include <termios.h>
 #include <unistd.h>
-//include
+// include
 
 #define DATA_DIR "../data/"
 #define USERS "users.txt"
@@ -219,31 +219,31 @@ int main() {
                 } else if (strcmp(subcommand, "clear") == 0 || strcmp(subcommand, "c") == 0) {
                     system("clear");
                     continue;
-                    // } else {
-                    //     if (subcommand == "ls" && arguments > 0) {
-                    //         std::cerr << "ls : too many arguments" << std::endl;
-                    //     } else if (subcommand == "cd" && arguments > 1) {
-                    //         std::cerr << "cd : too many arguments" << std::endl;
-                    //     } else if (subcommand == "print" && (arguments > 2)) {
-                    //         std::cerr << "print : too many arguments" << std::endl;
-                    //     } else if (subcommand == "edit" && (arguments > 1 || arguments < 1)) {
-                    //         if (arguments > 1) {
-                    //             std::cerr << "edit : too many arguments" << std::endl;
-                    //         } else {
-                    //             std::cerr << "<LINENUM> is missing in command : edit <LINENUM>" << std::endl;
-                    //         }
-                    //     } else if (subcommand == "select" && (arguments > 1 || arguments < 1)) {
-                    //         if (arguments > 1) {
-                    //             std::cerr << "select : too many arguments" << std::endl;
-                    //         } else {
-                    //             std::cerr << "<FILENAME> is missing in command : select <FILENAME>" << std::endl;
-                    //         }
-                    //     } else if (subcommand == "bye" && arguments >= 1) {
-                    //         std::cerr << "bye : too many arguments" << std::endl;
-                    //     } else {
-                    //         std::cerr << "Invalid command" << std::endl;
-                    //     }
-                    //     continue;
+                } else {
+                    if (strcmp(subcommand, "ls") == 0 && arguments > 0) {
+                        printf("ls : too many arguments\n");
+                    } else if (strcmp(subcommand, "cd") == 0 && arguments > 1) {
+                        printf("cd : too many arguments\n");
+                    } else if (strcmp(subcommand, "print") == 0 && (arguments > 2)) {
+                        printf("print : too many arguments\n");
+                    } else if (strcmp(subcommand, "edit") == 0 && (arguments > 1 || arguments < 1)) {
+                        if (arguments > 1) {
+                            printf("edit : too many arguments\n");
+                        } else {
+                            printf("<LINENUM> is missing in command : edit <LINENUM>\n");
+                        }
+                    } else if (strcmp(subcommand, "select") == 0 && (arguments > 1 || arguments < 1)) {
+                        if (arguments > 1) {
+                            printf("select : too many arguments\n");
+                        } else {
+                            printf("<FILENAME> is missing in command : select <FILENAME>");
+                        }
+                    } else if (strcmp(subcommand, "bye") == 0 && arguments >= 1) {
+                        printf("bye : too many arguments\n");
+                    } else {
+                        printf("Invalid command\n");
+                    }
+                    continue;
                 }
 
                 /* receive data from server */
