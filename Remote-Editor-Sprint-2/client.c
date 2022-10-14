@@ -157,6 +157,32 @@ int main() {
                     //     if (arguments == 0) {
                     //         SendDataToServer(command,&client);
                     //     } else if (arguments == 1) {
+                                //-------------C prog---------
+                                  /* checks 2nd arg is a number
+                                    char *token = strtok(command, " ");
+                                    token=strtok(NULL," ");
+                                    int num=atoi(token);
+                                    if(num<=0) {
+                                        printf("Value should be greater than 0");
+                                    }
+                                    SendDataToServer(command,&client);
+
+                                    
+                                    ------------checks both args --------
+                                    char *token = strtok(command, " ");
+                                    token=strtok(NULL," ");
+                                    int num1=atoi(token);
+                                    if(num1<=0) {
+                                        printf("Value 1 should be greater than 0");
+                                    }
+                                    token=strtok(NULL," ");
+                                    int num2=atoi(token);
+                                    if(num2<=0) {
+                                        printf("Value 2 should be greater than 0");
+                                    }
+                                    SendDataToServer(command,&client);
+                                    -------------END---------------
+                                    */
                     //         /* check 2nd argument is a number */
                     //         std::stringstream str_stream(command.substr(command.find(" ") + 1));
                     //         int number;
