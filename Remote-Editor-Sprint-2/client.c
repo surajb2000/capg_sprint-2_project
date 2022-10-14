@@ -9,7 +9,6 @@
 #include <sys/types.h>
 #include <termios.h>
 #include <unistd.h>
-// include
 
 #define DATA_DIR "../data/"
 #define USERS "users.txt"
@@ -95,7 +94,7 @@ int main() {
             if (strcmp(username, "anonymous") != 0)
                 printf("AUTHENTICATED\n");
             else {
-                printf("\nAnonumous\n");
+                printf("\nAnonymous\n");
             }
             while (1) {
                 /* get user input */
@@ -125,33 +124,33 @@ int main() {
 
                 if (strcmp(subcommand, "ls") == 0 || strcmp(subcommand, "pwd") == 0 && arguments == 0) {
                     SendDataToServer(command, &client);
-                    // } else if (strcmp(subcommand, "help") && arguments == 0) {
-                    //     printf("List of commands available: ls pwd cd select print edit clear bye help\n");
-                    //     continue;
-                    // } else if (subcommand == "help" && arguments == 1) {
-                    //     char *help_command = strtok(NULL, " ");
-                    //     if (help_command == "ls") {
-                    //         printf("ls - list files in current directory\nNo arguments are needed\n");
-                    //     } else if (help_command == "pwd") {
-                    //         printf("pwd - print current directory\nNo arguments are needed\n");
-                    //     } else if (help_command == "cd") {
-                    //         printf("cd <directory> - change current directory\nIt takes directory name as argument\n");
-                    //     } else if (help_command == "select") {
-                    //         printf("select <filename> - select file to edit\nIt takes filename name as argument\n");
-                    //     } else if (help_command == "print") {
-                    //         printf("print <start> <end> - print the file\nIt takes 2 numbers (starting and ending number) as optional arguments\n");
-                    //     } else if (help_command == "edit") {
-                    //         printf("edit <linenum> - edit the file\nIt takes line number as arguments and edit the line on the selected file\n");
-                    //     } else if (help_command == "bye") {
-                    //         printf("bye - logout the current user\nNo arguments are needed\n");
-                    //     } else if (help_command == "help") {
-                    //         printf("help - print list of commands\nsubcommand are passed as arguments\n");
-                    //     } else if (help_command == "clear") {
-                    //         printf("clear - clear the screen\nNo arguments are needed\n");
-                    //     } else {
-                    //         printf("Invalid command\n");
-                    //     }
-                    //     continue;
+                     } else if (strcmp(subcommand, "help")==0 && arguments == 0) {
+                         printf("List of commands available: ls pwd cd select print edit clear bye help\n");
+                         continue; }
+                      else if (strcmp(subcommand, "help")==0 && arguments == 1) {
+                         char *help_command = strtok(NULL, " ");
+                         if (strcmp(help_command, "ls")==0) {
+                             printf("ls - list files in current directory\nNo arguments are needed\n");
+                         } else if (strcmp(help_command, "pwd")==0) {
+                             printf("pwd - print current directory\nNo arguments are needed\n");
+                         } else if (strcmp(help_command, "cd")==0) {
+                             printf("cd <directory> - change current directory\nIt takes directory name as argument\n");
+                         } else if (strcmp(help_command, "select")==0) {
+                             printf("select <filename> - select file to edit\nIt takes filename name as argument\n");
+                         } else if (strcmp(help_command, "print")==0) {
+                             printf("print <start> <end> - print the file\nIt takes 2 numbers (starting and ending number) as optional arguments\n");
+                         } else if (strcmp(help_command, "edit")==0) {
+                             printf("edit <linenum> - edit the file\nIt takes line number as arguments and edit the line on the selected file\n");
+                         } else if (strcmp(help_command, "bye")==0) {
+                             printf("bye - logout the current user\nNo arguments are needed\n");
+                         } else if (strcmp(help_command, "help")==0) {
+                             printf("help - print list of commands\nsubcommand are passed as arguments\n");
+                         } else if (strcmp(help_command, "clear")==0) {
+                             printf("clear - clear the screen\nNo arguments are needed\n");
+                         } else {
+                             printf("Invalid command\n");
+                         }
+                         continue; 
                     // } else if (subcommand == "cd" && arguments <= 1) {
                     //     SendDataToServer(command,&client);
                     // } else if (subcommand == "print" && arguments <= 2) {
