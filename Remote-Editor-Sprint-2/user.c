@@ -3,7 +3,7 @@
 #include "./include/user.h"
 #include <stdio.h>
 
-#define DIR "../data/home/"
+#define DIR "./data/home/"
 
 /*
  * Constructor for the user class.

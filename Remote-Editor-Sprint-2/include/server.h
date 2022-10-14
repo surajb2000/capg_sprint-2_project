@@ -30,7 +30,7 @@ int SendDataToClient(int clientfd, const char *data);
 int ListDirContents(int clientfd, const char *dir);
 //int ChangeDir(const char *dir, User &user, int clientfd);
 int EditLine(int clientfd, const char *file, int linenum);
-int ViewFile(int clientfd, const char *file, int start, int end);
+int ViewFile(int clientfd, const char *file, int start, int end,ser *);
 int SelectFile(char *filename, const char *dir, int clientfd);
 
 #endif

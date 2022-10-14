@@ -118,111 +118,118 @@ int main() {
                 }
                 /* remove trailing space */
                 command[strlen(command) - 1] = '\0';
+                char com[100] = "";
+                strcpy(com, command);
 
                 /* separate command and arguments */
                 char *subcommand = strtok(command, " ");
 
                 if (strcmp(subcommand, "ls") == 0 || strcmp(subcommand, "pwd") == 0 && arguments == 0) {
                     SendDataToServer(command, &client);
-                     } else if (strcmp(subcommand, "help")==0 && arguments == 0) {
-                         printf("List of commands available: ls pwd cd select print edit clear bye help\n");
-                         continue; }
-                      else if (strcmp(subcommand, "help")==0 && arguments == 1) {
-                         char *help_command = strtok(NULL, " ");
-                         if (strcmp(help_command, "ls")==0) {
-                             printf("ls - list files in current directory\nNo arguments are needed\n");
-                         } else if (strcmp(help_command, "pwd")==0) {
-                             printf("pwd - print current directory\nNo arguments are needed\n");
-                         } else if (strcmp(help_command, "cd")==0) {
-                             printf("cd <directory> - change current directory\nIt takes directory name as argument\n");
-                         } else if (strcmp(help_command, "select")==0) {
-                             printf("select <filename> - select file to edit\nIt takes filename name as argument\n");
-                         } else if (strcmp(help_command, "print")==0) {
-                             printf("print <start> <end> - print the file\nIt takes 2 numbers (starting and ending number) as optional arguments\n");
-                         } else if (strcmp(help_command, "edit")==0) {
-                             printf("edit <linenum> - edit the file\nIt takes line number as arguments and edit the line on the selected file\n");
-                         } else if (strcmp(help_command, "bye")==0) {
-                             printf("bye - logout the current user\nNo arguments are needed\n");
-                         } else if (strcmp(help_command, "help")==0) {
-                             printf("help - print list of commands\nsubcommand are passed as arguments\n");
-                         } else if (strcmp(help_command, "clear")==0) {
-                             printf("clear - clear the screen\nNo arguments are needed\n");
-                         } else {
-                             printf("Invalid command\n");
-                         }
-                         continue; 
-                    // } else if (subcommand == "cd" && arguments <= 1) {
-                    //     SendDataToServer(command,&client);
-                    // } else if (subcommand == "print" && arguments <= 2) {
-                    //     if (arguments == 0) {
-                    //         SendDataToServer(command,&client);
-                    //     } else if (arguments == 1) {
-                                //-------------C prog---------
-                                  /* checks 2nd arg is a number
-                                    char *token = strtok(command, " ");
-                                    token=strtok(NULL," ");
-                                    int num=atoi(token);
-                                    if(num<=0) {
-                                        printf("Value should be greater than 0");
-                                    }
-                                    SendDataToServer(command,&client);
+                } else if (strcmp(subcommand, "help") == 0 && arguments == 0) {
+                    printf("List of commands available: ls pwd cd select print edit clear bye help\n");
+                    continue;
+                } else if (strcmp(subcommand, "help") == 0 && arguments == 1) {
+                    char *help_command = strtok(NULL, " ");
+                    if (strcmp(help_command, "ls") == 0) {
+                        printf("ls - list files in current directory\nNo arguments are needed\n");
+                    } else if (strcmp(help_command, "pwd") == 0) {
+                        printf("pwd - print current directory\nNo arguments are needed\n");
+                    } else if (strcmp(help_command, "cd") == 0) {
+                        printf("cd <directory> - change current directory\nIt takes directory name as argument\n");
+                    } else if (strcmp(help_command, "select") == 0) {
+                        printf("select <filename> - select file to edit\nIt takes filename name as argument\n");
+                    } else if (strcmp(help_command, "print") == 0) {
+                        printf("print <start> <end> - print the file\nIt takes 2 numbers (starting and ending number) as optional arguments\n");
+                    } else if (strcmp(help_command, "edit") == 0) {
+                        printf("edit <linenum> - edit the file\nIt takes line number as arguments and edit the line on the selected file\n");
+                    } else if (strcmp(help_command, "bye") == 0) {
+                        printf("bye - logout the current user\nNo arguments are needed\n");
+                    } else if (strcmp(help_command, "help") == 0) {
+                        printf("help - print list of commands\nsubcommand are passed as arguments\n");
+                    } else if (strcmp(help_command, "clear") == 0) {
+                        printf("clear - clear the screen\nNo arguments are needed\n");
+                    } else {
+                        printf("Invalid command\n");
+                    }
+                    continue;
+                } else if (strcmp(subcommand, "cd") == 0 && arguments <= 1) {
+                    SendDataToServer(command, &client);
+                } else if (strcmp(subcommand, "print") == 0 && arguments <= 2) {
+                    if (arguments == 0) {
+                        SendDataToServer(command, &client);
+                    } else if (arguments == 1) {
+                        //-------------C prog---------
+                        /* checks 2nd arg is a number
+                          char *token = strtok(command, " ");
+                          token=strtok(NULL," ");
+                          int num=atoi(token);
+                          if(num<=0) {
+                              printf("Value should be greater than 0");
+                          }
+                          SendDataToServer(command,&client);
 
-                                    
-                                    ------------checks both args --------
-                                    char *token = strtok(command, " ");
-                                    token=strtok(NULL," ");
-                                    int num1=atoi(token);
-                                    if(num1<=0) {
-                                        printf("Value 1 should be greater than 0");
-                                    }
-                                    token=strtok(NULL," ");
-                                    int num2=atoi(token);
-                                    if(num2<=0) {
-                                        printf("Value 2 should be greater than 0");
-                                    }
-                                    SendDataToServer(command,&client);
-                                    -------------END---------------
-                                    */
-                    //         /* check 2nd argument is a number */
-                    //         std::stringstream str_stream(command.substr(command.find(" ") + 1));
-                    //         int number;
-                    //         str_stream >> number;
-                    //         if (str_stream.fail()) {
-                    //             std::cerr << "Value must be a number" << std::endl;
-                    //             continue;
-                    //         }
-                    //         if (number <= 0) {
-                    //             std::cerr << "Value should be greater than 0" << std::endl;
-                    //             continue;
-                    //         }
-                    //         /* send command to server */
-                    //         client.SendDataToServer(command);
-                    //     } else {
-                    //         /* check both 2nd and 3rd arguments are numbers */
-                    //         int number1, number2;
-                    //         std::stringstream ss1(command.substr(command.find(" ") + 1));
-                    //         ss1 >> number1;
-                    //         if (ss1.fail()) {
-                    //             std::cerr << "Value 1 must be a number" << std::endl;
-                    //             continue;
-                    //         }
-                    //         if (number1 <= 0) {
-                    //             std::cerr << "Value 1 should be greater than 0" << std::endl;
-                    //             continue;
-                    //         }
-                    //         ss1 >> number2;
-                    //         if (ss1.fail()) {
-                    //             std::cerr << "Value 2 must be a number" << std::endl;
-                    //             continue;
-                    //         }
-                    //         if (number2 <= 0) {
-                    //             std::cerr << "Value 2 should be greater than 0" << std::endl;
-                    //             continue;
-                    //         }
-                    //         /* send command to server */
-                    //         client.SendDataToServer(command);
-                    //     }
-                    // } else if (subcommand == "edit" && arguments == 1) {
+
+                          ------------checks both args --------
+                          char *token = strtok(command, " ");
+                          token=strtok(NULL," ");
+                          int num1=atoi(token);
+                          if(num1<=0) {
+                              printf("Value 1 should be greater than 0");
+                          }
+                          token=strtok(NULL," ");
+                          int num2=atoi(token);
+                          if(num2<=0) {
+                              printf("Value 2 should be greater than 0");
+                          }
+                          SendDataToServer(command,&client);
+                          -------------END---------------
+                          */
+                        /* check 2nd argument is a number */
+                        char *subarg1 = strtok(NULL, " ");
+                        // std::stringstream str_stream(command.substr(command.find(" ") + 1));
+                        int number = atoi(subarg1);
+                        // if (str_stream.fail()) {
+                        //     std::cerr << "Value must be a number" << std::endl;
+                        //     continue;
+                        // }
+                        if (number <= 0) {
+                            printf("Value should be greater than 0\n");
+                            continue;
+                        }
+                        /* send command to server */
+                        SendDataToServer(com, &client);
+                    } else {
+                        /* check both 2nd and 3rd arguments are numbers */
+                        char *subarg = strtok(NULL, " ");
+                        int number1 = atoi(subarg);
+                        subarg = strtok(NULL, " ");
+                        int number2 = atoi(subarg);
+                        // std::stringstream ss1(command.substr(command.find(" ") + 1));
+                        // ss1 >> number1;
+                        //  if (ss1.fail()) {
+                        //      std::cerr << "Value 1 must be a number" << std::endl;
+                        //      continue;
+                        //  }
+                        // command = print 1 2
+                        // print\01\02;
+                        if (number1 <= 0) {
+                            printf("Value 1 should be greater than 0\n");
+                            continue;
+                        }
+                        // ss1 >> number2;
+                        // if (ss1.fail()) {
+                        //     printf("Value 2 must be a number\n");
+                        //     continue;
+                        // }
+                        if (number2 <= 0) {
+                            printf("Value 2 should be greater than 0\n");
+                            continue;
+                        }
+                        /* send command to server */
+                        SendDataToServer(com, &client);
+                    }
+                } else if (subcommand == "edit" && arguments == 1) {
                     //     /* check whether the argument is a number */
                     //     std::stringstream ss3(command.substr(command.find(" ") + 1));
                     //     int number;
@@ -236,8 +243,8 @@ int main() {
                     //         continue;
                     //     }
                     //     client.SendDataToServer(command);
-                    // } else if (subcommand == "select" && arguments == 1) {
-                    // client.SendDataToServer(command);
+                } else if (strcmp(subcommand, "select") == 0 && arguments == 1) {
+                    SendDataToServer(com, &client);
                 } else if (strcmp(subcommand, "bye") == 0 && arguments == 0) {
                     DisconnectClient(&client);
                     break;

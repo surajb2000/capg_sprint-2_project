@@ -120,18 +120,26 @@ int main() {
                     //         server.SendDataToClient(clientfd, "0");
                     //     else
                     //         server.EditLine(clientfd, filename, line_number);
-                    // } else if (command == "print") {
-                    //     if (filename.empty())
-                    //         server.SendDataToClient(clientfd, "0");
-                    //     else {
-                    //         int start_line = 1, end_line = -1;
-                    //         ss >> start_line >> end_line;
-                    //         server.ViewFile(clientfd, filename, start_line, end_line);
-                    //     }
-                    // } else if (command == "select") {
-                    //     ss >> filename;
-                    //     if (!filename.empty())
-                    //         server.SelectFile(filename, dir, clientfd);
+                } else if (strcmp(command, "print") == 0) {
+                    if (strcmp(filename, "") == 0)
+                        SendDataToClient(clientfd, "0");
+                    else {
+                        int start_line = 1, end_line = -1;
+                        token = strtok(NULL, " ");
+                        if (token != NULL) {
+                            start_line = atoi(token);
+                        }
+                        token = strtok(NULL, " ");
+                        if (token != NULL) {
+                            end_line = atoi(token);
+                        }
+                        ViewFile(clientfd, filename, start_line, end_line, &server);
+                    }
+                } else if (strcmp(command, "select") == 0) {
+                    token = strtok(NULL, " ");
+                    strcpy(filename, token);
+                    if (strcmp(filename, "") != 0)
+                        SelectFile(filename, dir, clientfd);
                 } else if (strcmp(command, "bye") == 0) {
                     close(clientfd);
                     break;

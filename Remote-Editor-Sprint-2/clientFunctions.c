@@ -1,6 +1,6 @@
 /*-------------------------START OF Client.cpp----------------------------*/
 
-
+#include "./include/client.h"
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <signal.h>
@@ -9,7 +9,6 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
-#include "./include/client.h"
 #define PORT 8021
 #define IP "127.0.0.1"
 
@@ -51,7 +50,7 @@ int ConnectToServer(c *c) {
 int SendDataToServer(char *data, c *c) {
     /* send data to server */
 
-    if (strcmp(data, "") != 0 && send(c->socketfd, data,strlen(data), 0) == -1) {
+    if (strcmp(data, "") != 0 && send(c->socketfd, data, strlen(data), 0) == -1) {
         /* display error to stderr */
         perror("send");
         return -1;
@@ -99,7 +98,7 @@ int AuthenticateUser(char *username, char *password, c *c) {
     }
 
     /* check whether the user is authenticated */
-    if (strcmp(c->buffer, "AUTHENTICATED")==0)
+    if (strcmp(c->buffer, "AUTHENTICATED") == 0)
         return 1;
     c->isConnected = 0;
     return 0;
@@ -150,7 +149,7 @@ int ReceiveFile(c *c) {
             return -1;
         }
         isNotEnd = c->buffer[0];
-        write(1, c->buffer, len);
+        printf("%s\n", c->buffer);
     }
     printf("\n");
     // std::cout << std::endl;

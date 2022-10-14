@@ -7,7 +7,7 @@
 #include "./include/server.h"
 #include "./include/user.h"
 
-#define DATA_DIR "../data/"
+#define DATA_DIR "./data/"
 #define USERS "users.txt"
 
 /*
@@ -165,7 +165,8 @@ int ListDirContents(int client_socketfd, const char *directory) {
     /* list directory contents */
     DIR *dir;
     char buffer[1000] = {"\0"}, filename[1000] = {"\0"};
-    if ((dir = opendir(directory)) != NULL) {
+    dir = opendir(directory);
+    if (dir != NULL) {
         struct dirent *ent;
         while ((ent = readdir(dir)) != NULL) {
             if (ent->d_type == DT_DIR) {
@@ -190,7 +191,7 @@ int ListDirContents(int client_socketfd, const char *directory) {
             }
         }
         /* remove the last newline character */
-        buffer[strlen(buffer) - 1] = "\0";
+        buffer[strlen(buffer) - 1] = '\0';
         SendDataToClient(client_socketfd, buffer);
         closedir(dir);
         return 0;
@@ -256,9 +257,11 @@ int SelectFile(char *filename, const char *dirname, int client_socketfd) {
         while ((ent = readdir(dir)) != NULL) {
             if (ent->d_type == DT_REG && strcmp(ent->d_name, filename) == 0) {
                 /* set the filename to fully qualified path */
-                strcpy(filename, dirname);
-                strcat(filename, "/");
-                strcat(filename, filename);
+                char new[100] = "";
+                strcpy(new, dirname);
+                strcat(new, "/");
+                strcat(new, filename);
+                strcpy(filename, new);
                 /* send success message to client */
                 send(client_socketfd, "FILE_SELECTED", sizeof("FILE_SELECTED"), 0);
                 closedir(dir);
@@ -356,53 +359,69 @@ int SelectFile(char *filename, const char *dirname, int client_socketfd) {
 //     return 0;
 // }
 
-// /*
-//  * This function is responsible for handling the print request.
-//  */
-// int Server::ViewFile(int client_socketfd, const std::string &filename, int start_line, int end_line) {
-//     /* open file in read mode */
-//     std::ifstream file(filename);
-//     if (!file.is_open()) {
-//         /* end failure message to client */
-//         SendDataToClient(client_socketfd, "FILE_NOT_FOUND");
-//         return -1;
-//     }
+/*
+ * This function is responsible for handling the print request.
+ */
+int ViewFile(int client_socketfd, const char *filename, int start_line, int end_line, ser *ser) {
+    /* open file in read mode */
+    FILE *f = fopen(filename, "r");
+    // std::ifstream file(filename);
+    if (f == NULL) {
+        /* end failure message to client */
+        SendDataToClient(client_socketfd, "FILE_NOT_FOUND");
+        return -1;
+    }
 
-//     // get the number of lines in the file
-//     std::string line;
-//     int line_number = 0;
-//     std::ifstream file_read(filename);
-//     while (std::getline(file_read, line)) {
-//         line_number++;
-//     }
-//     file_read.close();
+    // get the number of lines in the file
+    char line[100] = "";
+    int line_number = 0;
+    // std::ifstream file_read(filename);
+    //  while (std::getline(file_read, line)) {
+    //      line_number++;
+    //  }
+    //  file_read.close();
+    while (fgets(line, 100, f)) {
+        line_number++;
+    }
+    fseek(f, 0, SEEK_SET);
 
-//     /* check whether start_line and end_line is valid */
-//     if (end_line > line_number || start_line > line_number) {
-//         // send the failure msg with start and end line of the file to client
-//         std::string msg = std::string("INVALID_LINE_NUMBER : Choose between ") + std::to_string(1) + " and " + std::to_string(line_number);
-//         SendDataToClient(client_socketfd, msg);
+    /* check whether start_line and end_line is valid */
+    if (end_line > line_number || start_line > line_number) {
+        // send the failure msg with start and end line of the file to client
+        char msg[100] = "INVALID_LINE_NUMBER : Choose between 1 and ";
+        char temp[100] = "";
+        sprintf(temp, "%d", line_number);
+        strcat(msg, temp);
+        SendDataToClient(client_socketfd, msg);
 
-//     } else {
+    } else {
 
-//         /* read file contents and send it to the client */
-//         line.clear();
-//         int i = 1;
-//         while (std::getline(file, line)) {
-//             if (i >= start_line) {
-//                 /* send line with line number to client */
-//                 std::string line_with_number = std::to_string(i) + " " + line + "\n";
-//                 SendDataToClient(client_socketfd, line_with_number);
-//                 if (end_line != -1 && i == end_line) {
-//                     file.close();
-//                     break;
-//                 }
-//             }
-//             i++;
-//         }
-//         file.close();
-//     }
-//     memset(buffer, 0, sizeof(buffer));
-//     send(client_socketfd, buffer, MAX_SIZE, 0);
-//     return 0;
-// }
+        /* read file contents and send it to the client */
+        strcpy(line, "");
+        int i = 1;
+        while (fgets(line, 100, f)) {
+            if (i >= start_line) {
+                /* send line with line number to client */
+                char line_with_number[1000];
+                char temp[100];
+                // itoa(i,temp,DECIMAL);
+                sprintf(temp, "%d", i);
+                strcpy(line_with_number, temp);
+                strcat(line_with_number, " ");
+                //sprintf(temp, "%d", line);
+                strcat(line_with_number, line);
+                //strcat(line_with_number, "\n");
+                SendDataToClient(client_socketfd, line_with_number);
+                if (end_line != -1 && i == end_line) {
+                    fclose(f);
+                    break;
+                }
+            }
+            i++;
+        }
+        //fclose(f);
+    }
+    memset(ser->buffer, 0, sizeof(ser->buffer));
+    send(client_socketfd, ser->buffer, MAX_SIZE, 0);
+    return 0;
+}
