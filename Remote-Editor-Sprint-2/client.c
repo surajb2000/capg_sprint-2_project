@@ -154,7 +154,7 @@ int main() {
                     }
                     continue;
                 } else if (strcmp(subcommand, "cd") == 0 && arguments <= 1) {
-                    SendDataToServer(command, &client);
+                    SendDataToServer(com, &client);
                 } else if (strcmp(subcommand, "print") == 0 && arguments <= 2) {
                     if (arguments == 0) {
                         SendDataToServer(command, &client);
@@ -229,20 +229,19 @@ int main() {
                         /* send command to server */
                         SendDataToServer(com, &client);
                     }
-                } else if (subcommand == "edit" && arguments == 1) {
-                    //     /* check whether the argument is a number */
-                    //     std::stringstream ss3(command.substr(command.find(" ") + 1));
-                    //     int number;
-                    //     ss3 >> number;
-                    //     if (ss3.fail()) {
-                    //         std::cerr << "Value must be a number" << std::endl;
-                    //         continue;
-                    //     }
-                    //     if (number <= 0) {
-                    //         std::cerr << "Value should be greater than 0" << std::endl;
-                    //         continue;
-                    //     }
-                    //     client.SendDataToServer(command);
+                } else if (strcmp(subcommand, "edit") == 0 && arguments == 1) {
+                    /* check whether the argument is a number */
+                    char *subarg = strtok(NULL, " ");
+                    int number = atoi(subarg);
+                    // if (ss3.fail()) {
+                    //     std::cerr << "Value must be a number" << std::endl;
+                    //     continue;
+                    // }
+                    if (number <= 0) {
+                        printf("Value should be greater than 0\n");
+                        continue;
+                    }
+                    SendDataToServer(com, &client);
                 } else if (strcmp(subcommand, "select") == 0 && arguments == 1) {
                     SendDataToServer(com, &client);
                 } else if (strcmp(subcommand, "bye") == 0 && arguments == 0) {

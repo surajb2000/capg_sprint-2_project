@@ -109,17 +109,18 @@ int main() {
                 } else if (strcmp(command, "pwd") == 0) {
                     SendDataToClient(clientfd, dir);
                 } else if (strcmp(command, "cd") == 0) {
-                    char *new_dir;
+                    char new_dir[100] = "";
                     token = strtok(NULL, " ");
                     strcpy(new_dir, token);
-                    // ChangeDir(new_dir, current_user, clientfd);
-                    // } else if (command == "edit") {
-                    //     int line_number;
-                    //     ss >> line_number;
-                    //     if (filename.empty())
-                    //         server.SendDataToClient(clientfd, "0");
-                    //     else
-                    //         server.EditLine(clientfd, filename, line_number);
+                    ChangeDir(new_dir, &current_user, clientfd, &server);
+                } else if (strcmp(command, "edit") == 0) {
+                    int line_number;
+                    token = strtok(NULL, " ");
+                    line_number = atoi(token);
+                    if (strcmp(filename, "") == 0)
+                        SendDataToClient(clientfd, "0");
+                    else
+                        EditLine(clientfd, filename, line_number, &server);
                 } else if (strcmp(command, "print") == 0) {
                     if (strcmp(filename, "") == 0)
                         SendDataToClient(clientfd, "0");

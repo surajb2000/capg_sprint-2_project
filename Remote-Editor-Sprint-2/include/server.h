@@ -7,8 +7,8 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#include <netinet/in.h>
 #include "user.h"
+#include <netinet/in.h>
 //#include <vector>
 #define MAX_SIZE 1024
 
@@ -28,9 +28,9 @@ char *ReceiveDataFromClient(int clientfd, ser *);
 int SendDataToClient(int clientfd, const char *data);
 // int AuthenticateUser(int clientfd, const User &user);
 int ListDirContents(int clientfd, const char *dir);
-//int ChangeDir(const char *dir, User &user, int clientfd);
-int EditLine(int clientfd, const char *file, int linenum);
-int ViewFile(int clientfd, const char *file, int start, int end,ser *);
+int ChangeDir(const char *new_directory, user *current_user, int client_socketfd, ser *);
+int EditLine(int clientfd, const char *file, int linenum, ser *);
+int ViewFile(int clientfd, const char *file, int start, int end, ser *);
 int SelectFile(char *filename, const char *dir, int clientfd);
 
 #endif

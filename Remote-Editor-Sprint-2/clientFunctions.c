@@ -118,9 +118,10 @@ int EditLine(c *c) {
     printf("%s", c->buffer);
 
     /* ask user to edit the line received from server and send it to server */
-    char *edited_line;
+    char edited_line[1000];
     printf("Enter changes to the line: ");
-    scanf("%s", &edited_line);
+    // scanf("%s", &edited_line);
+    fgets(edited_line, 1000, stdin);
     // std::getline(std::cin, edited_line);
     if (strlen(edited_line) == 0)
         SendDataToServer("0", c);

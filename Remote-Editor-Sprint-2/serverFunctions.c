@@ -192,6 +192,9 @@ int ListDirContents(int client_socketfd, const char *directory) {
         }
         /* remove the last newline character */
         buffer[strlen(buffer) - 1] = '\0';
+        if (strcmp(buffer, "") == 0) {
+            strcpy(buffer, "Empty Directory\n");
+        }
         SendDataToClient(client_socketfd, buffer);
         closedir(dir);
         return 0;
@@ -204,47 +207,62 @@ int ListDirContents(int client_socketfd, const char *directory) {
  * This function is responsible for handling the cd request.
  */
 
-// int Server::ChangeDir(const std::string &new_directory, User &current_user, int client_socketfd) {
-
-//     DIR *dir;
-//     if (new_directory.empty()) {
-//         /* change directory to home directory */
-//         current_user.ChangeDir("");
-//         /* send switched to home directory message to client */
-//         send(client_socketfd, "SWITCHED_TO_HOME_DIRECTORY", sizeof("SWITCHED_TO_HOME_DIRECTORY"), 0);
-//         return 0;
-//     } else if ((dir = opendir((current_user.GetDir()).c_str())) != NULL) {
-//         struct dirent *ent;
-//         while ((ent = readdir(dir)) != NULL) {
-//             if (ent->d_type == DT_DIR && ent->d_name == new_directory && new_directory != ".." && new_directory != ".") {
-//                 /* change directory to new directory */
-//                 current_user.ChangeDir(current_user.GetDir() + "/" + new_directory);
-//                 /* send success message to client */
-//                 send(client_socketfd, "DIRECTORY_CHANGED", sizeof("DIRECTORY_CHANGED"), 0);
-//                 closedir(dir);
-//                 return 0;
-//             } else if (new_directory == ".." || new_directory == "../") {
-//                 /* change directory and restrict user to go beyond the ../data/home/username directory */
-//                 if (current_user.GetDir() == "../data/home/" + current_user.GetName()) {
-//                     /* send restricted message to client */
-//                     send(client_socketfd, "DIRECTORY_RESTRICTED", sizeof("DIRECTORY_RESTRICTED"), 0);
-//                     closedir(dir);
-//                     return 0;
-//                 }
-//                 /* go to previous directory and remove the last directory from the current directory */
-//                 current_user.ChangeDir(current_user.GetDir().substr(0, current_user.GetDir().find_last_of("/")));
-//                 /* send success message to client */
-//                 send(client_socketfd, "DIRECTORY_CHANGED", sizeof("DIRECTORY_CHANGED"), 0);
-//                 closedir(dir);
-//                 return 0;
-//             }
-//         }
-//         closedir(dir);
-//     }
-//     /* send failure message to client */
-//     send(client_socketfd, "DIRECTORY_NOT_FOUND", sizeof("DIRECTORY_NOT_FOUND"), 0);
-//     return -1;
-// }
+int ChangeDir(const char *new_directory, user *current_user, int client_socketfd, ser *ser) {
+    DIR *dir;
+    if (strcmp(new_directory, "") == 0) {
+        /* change directory to home directory */
+        ChangeUserDir(current_user, "");
+        /* send switched to home directory message to client */
+        send(client_socketfd, "SWITCHED_TO_HOME_DIRECTORY", sizeof("SWITCHED_TO_HOME_DIRECTORY"), 0);
+        return 0;
+    } else if ((dir = opendir(current_user->dir)) != NULL) {
+        struct dirent *ent;
+        while ((ent = readdir(dir)) != NULL) {
+            if (ent->d_type == DT_DIR && strcmp(ent->d_name, new_directory) == 0 && strcmp(new_directory, "..") != 0 && strcmp(new_directory, ".") != 0) {
+                /* change directory to new directory */
+                char temp[100] = "";
+                strcpy(temp, current_user->dir);
+                strcat(temp, "/");
+                strcat(temp, new_directory);
+                ChangeUserDir(current_user, temp);
+                /* send success message to client */
+                send(client_socketfd, "DIRECTORY_CHANGED", sizeof("DIRECTORY_CHANGED"), 0);
+                closedir(dir);
+                return 0;
+            } else if (strcmp(new_directory, "..") == 0 || strcmp(new_directory, "../") == 0) {
+                /* change directory and restrict user to go beyond the ../data/home/username directory */
+                char temp[100] = "";
+                strcpy(temp, "./data/home/");
+                strcat(temp, current_user->name);
+                if (strcmp(current_user->dir, temp) == 0) {
+                    /* send restricted message to client */
+                    send(client_socketfd, "DIRECTORY_RESTRICTED", sizeof("DIRECTORY_RESTRICTED"), 0);
+                    closedir(dir);
+                    return 0;
+                }
+                /* go to previous directory and remove the last directory from the current directory */
+                int l = strlen(current_user->dir);
+                while (l--) {
+                    if (current_user->dir[l] == '/') {
+                        current_user->dir[l] = '\0';
+                        break;
+                    }
+                }
+                //./data/home/suraj/some
+                //./data/home/suraj
+                // ChangeUserDir(current_user, temp);
+                /* send success message to client */
+                send(client_socketfd, "DIRECTORY_CHANGED", sizeof("DIRECTORY_CHANGED"), 0);
+                closedir(dir);
+                return 0;
+            }
+        }
+        closedir(dir);
+    }
+    /* send failure message to client */
+    send(client_socketfd, "DIRECTORY_NOT_FOUND", sizeof("DIRECTORY_NOT_FOUND"), 0);
+    return -1;
+}
 
 /*
  * This function is responsible for handling the select request.
@@ -280,84 +298,107 @@ int SelectFile(char *filename, const char *dirname, int client_socketfd) {
 /*
  * This function is responsible for handling the edit request.
  */
-// int EditLine(int client_socketfd, const char *filename, int line_number) {
-//     /* open file in read mode at line_number line */
-//     std::ifstream file(filename);
-//     if (!file.is_open()) {
-//         SendDataToClient(client_socketfd, "FILE_NOT_FOUND");
-//         return -1;
-//     }
-//     /* store the file in a vector */
-//     std::vector<std::string> lines;
-//     std::string line;
-//     while (std::getline(file, line)) {
-//         lines.push_back(line);
-//     }
-//     /* close file */
-//     file.close();
-//     /* check whether line_number is valid */
-//     if (line_number > (int)lines.size()) {
-//         /* send failure message to client */
-//         SendDataToClient(client_socketfd, "INVALID_LINE_NUMBER");
-//         return -1;
-//     }
+int EditLine(int client_socketfd, const char *filename, int line_number, ser *ser) {
+    /* open file in read mode at line_number line */
+    // std::ifstream file(filename);
+    FILE *f = fopen(filename, "r");
+    if (f == NULL) {
+        SendDataToClient(client_socketfd, "FILE_NOT_FOUND");
+        return -1;
+    }
+    /* store the file in a vector */
+    char lines[100][1000];
+    for (int i = 0; i < 100; i++) {
+        memset(lines[i], 0, sizeof(lines[i]));
+    }
+    // fseek(f, 0, SEEK_SET);
+    char line[1000] = "";
+    int i = 0;
+    while (fgets(line, 1000, f)) {
+        printf("entered");
+        strcpy(lines[i], line);
+        i++;
+        // lines.push_back(line);
+    }
+    /* close file */
+    // file.close();
+    /* check whether line_number is valid */
+    // fseek(f, 0, SEEK_SET);
+    fclose(f);
+    if (line_number > i) {
+        /* send failure message to client */
+        SendDataToClient(client_socketfd, "INVALID_LINE_NUMBER");
+        return -1;
+    }
 
-//     /* send the selected line with line_number to client */
-//     line.clear();
-//     int space_count = 0;
-//     for (auto ch : lines[line_number - 1]) {
-//         if (ch == ' ') {
-//             space_count++;
-//         } else {
-//             break;
-//         }
-//     }
-//     std::string trimmed_line = lines[line_number - 1].substr(space_count);
-//     line = std::to_string(line_number) + ":" + trimmed_line;
-//     SendDataToClient(client_socketfd, line);
+    /* send the selected line with line_number to client */
+    // line.clear();
+    strcpy(line, "");
+    int space_count = 0;
+    char ch;
+    for (int k = 0; k < strlen(lines[line_number - 1]); k++) {
+        ch = lines[line_number - 1][k];
+        if (ch == ' ') {
+            space_count++;
+        } else {
+            break;
+        }
+    }
+    char trimmed_line[100];
+    // = lines[line_number - 1][space_count];
+    strcpy(trimmed_line, lines[line_number - 1] + space_count);
+    sprintf(line, "%d", line_number);
+    strcat(line, ":");
+    strcat(line, trimmed_line);
+    SendDataToClient(client_socketfd, line);
 
-//     /* receive the edited line from client */
-//     memset(buffer, 0, sizeof(buffer));
-//     recv(client_socketfd, buffer, sizeof(buffer), 0);
+    /* receive the edited line from client */
+    memset(ser->buffer, 0, sizeof(ser->buffer));
+    recv(client_socketfd, ser->buffer, sizeof(ser->buffer), 0);
 
-//     std::cout << "Changes received from client: " << buffer << std::endl;
+    printf("Changes received from client: %s\n", ser->buffer);
 
-//     // again load the file in a vector
-//     std::ifstream file1(filename);
-//     if (!file1.is_open()) {
-//         /* display error to stderr */
-//         SendDataToClient(client_socketfd, "FILE_NOT_FOUND");
-//         return -1;
-//     }
-//     std::string line1;
-//     lines.clear();
-//     while (std::getline(file1, line1)) {
-//         lines.push_back(line1);
-//     }
-//     /* close file */
-//     file1.close();
+    // // again load the file in a vector
+    // std::ifstream file1(filename);
+    // if (!file1.is_open()) {
+    //     /* display error to stderr */
+    //     SendDataToClient(client_socketfd, "FILE_NOT_FOUND");
+    //     return -1;
+    // }
+    // std::string line1;
+    // lines.clear();
+    // while (std::getline(file1, line1)) {
+    //     lines.push_back(line1);
+    // }
+    // /* close file */
+    // file1.close();
 
-//     /* replace the line in the vector */
-//     if (strcmp(buffer, "0") != 0) {
-//         trimmed_line.clear();
-//         while (space_count--) {
-//             trimmed_line += ' ';
-//         }
-//         trimmed_line += buffer;
-//         lines[line_number - 1] = trimmed_line;
-//     }
+    /* replace the line in the vector */
+    if (strcmp(ser->buffer, "0") != 0) {
+        strcpy(trimmed_line, "");
+        while (space_count--) {
+            strcat(trimmed_line, " ");
+        }
+        strcat(trimmed_line, ser->buffer);
+        strcpy(lines[line_number - 1], trimmed_line);
+    }
 
-//     /* open file in write mode */
-//     std::ofstream file_write(filename);
+    /* open file in write mode */
+    // std::ofstream file_write(filename);
 
-//     /* write the vector to file */
-//     for (auto single_line : lines) {
-//         file_write << single_line << std::endl;
-//     }
-//     /* close file */
-//     file_write.close();
-//     return 0;
-// }
+    // /* write the vector to file */
+    // for (auto single_line : lines) {
+    //     file_write << single_line << std::endl;
+    // }
+    // /* close file */
+    // file_write.close();
+    f = fopen(filename, "w");
+    for (int k = 0; k < i; k++) {
+        fputs(lines[k], f);
+    }
+    fclose(f);
+    return 0;
+}
 
 /*
  * This function is responsible for handling the print request.
@@ -408,9 +449,9 @@ int ViewFile(int client_socketfd, const char *filename, int start_line, int end_
                 sprintf(temp, "%d", i);
                 strcpy(line_with_number, temp);
                 strcat(line_with_number, " ");
-                //sprintf(temp, "%d", line);
+                // sprintf(temp, "%d", line);
                 strcat(line_with_number, line);
-                //strcat(line_with_number, "\n");
+                // strcat(line_with_number, "\n");
                 SendDataToClient(client_socketfd, line_with_number);
                 if (end_line != -1 && i == end_line) {
                     fclose(f);
@@ -419,7 +460,7 @@ int ViewFile(int client_socketfd, const char *filename, int start_line, int end_
             }
             i++;
         }
-        //fclose(f);
+        // fclose(f);
     }
     memset(ser->buffer, 0, sizeof(ser->buffer));
     send(client_socketfd, ser->buffer, MAX_SIZE, 0);
