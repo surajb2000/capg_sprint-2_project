@@ -17,16 +17,6 @@ void User(const char *name, const char *password, user *u) {
     strcpy(u->password, password);
 }
 
-/*
- * Returns the name of the user.
- */
-char *GetName(user *u) {
-    return u->name;
-}
-
-/*
- * changes the directory of the user.
- */
 int ChangeUserDir(user *u, const char *dir) {
     if (strcmp(dir, "") == 0) {
         strcpy(u->dir, DIR);
@@ -35,17 +25,3 @@ int ChangeUserDir(user *u, const char *dir) {
         strcpy(u->dir, dir);
     return 0;
 }
-
-/*
- * Returns the directory of the user.
- */
-// char *GetDir(user *u) {
-//     return u->dir;
-// }
-
-// /*
-//  * overloading == operator to compare two users.
-//  */
-// bool User::operator==(const user *u) {
-//     return (this->name == u.name && this->password == u.password);
-// }

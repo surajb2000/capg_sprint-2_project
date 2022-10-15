@@ -14,8 +14,5 @@ typedef struct User {
 
 void User(const char *name, const char *password,user *);
 int ChangeUserDir(user *u,const char *new_dir);
-char *GetDir();
-// bool operator==(const User &user);
-char *GetName();
 
 #endif

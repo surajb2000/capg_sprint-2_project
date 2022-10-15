@@ -460,7 +460,8 @@ int ViewFile(int client_socketfd, const char *filename, int start_line, int end_
             }
             i++;
         }
-        // fclose(f);
+        if (end_line == -1)
+            fclose(f);
     }
     memset(ser->buffer, 0, sizeof(ser->buffer));
     send(client_socketfd, ser->buffer, MAX_SIZE, 0);
