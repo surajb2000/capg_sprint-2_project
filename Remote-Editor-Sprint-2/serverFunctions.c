@@ -47,24 +47,23 @@ int createServer(ser *ser) {
         perror("listen");
         exit(EXIT_FAILURE);
     }
-    strcpy(ser->users[ser->n].name, "anonymous");
-    strcpy(ser->users[ser->n].password, "password");
-    ser->n += 1;
+    // strcpy(ser->users[ser->n].name, "anonymous");
+    // strcpy(ser->users[ser->n].password, "password");
+    // ser->n += 1;
 }
 
 int LoadUsersData(ser *ser) {
 
     /* read data from ../data/users.txt file and store it in users vector */
     FILE *file;
-    char *line;
-    char *users_file = USERS;
-    char *name, password, dir;
+    char line[100];
+    char users_file[100] = USERS;
+    char name[100], password[100], dir[100];
 
-    char f = DATA_DIR;
+    char f[100] = DATA_DIR;
     strcat(f, users_file);
 
-    file = fopen(f, 'r');
-    // file.open(DATA_DIR + users_file);
+    file = fopen(f, "r");
     if (file == NULL)
         return -1;
     while (fgets(line, 100, file)) {
@@ -72,27 +71,14 @@ int LoadUsersData(ser *ser) {
         strcpy(name, token);
         token = strtok(NULL, " ");
         strcpy(password, token);
-        token = strtok(NULL, " ");
-        strcpy(dir, token);
+        password[strlen(password) - 1] = '\0';
 
         strcpy(ser->users[ser->n].name, name);
         strcpy(ser->users[ser->n].password, password);
+        ser->n++;
     }
     fclose(file);
     return 0;
-    /*
-    while (std::getline(file, line)) {
-        ss.str(line);
-        ss >> name >> password >> dir;
-        if (!name.empty() && !password.empty()) {
-            User user(name, password);
-            users.push_back(user);
-        }
-        ss.clear();
-    }
-    file.close();
-    return 0;
-    */
 }
 
 /*

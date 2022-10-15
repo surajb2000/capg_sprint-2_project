@@ -30,12 +30,6 @@ int CreateSocket(c *c) {
     return c->socketfd;
 }
 
-int GetSocketfd(c *c) {
-    if (c->socketfd > 0)
-        return c->socketfd;
-    return -1; // return -1 if socketfd is not initialized
-}
-
 int ConnectToServer(c *c) {
     /* connect to server */
     if (connect(c->socketfd, (struct sockaddr *)&c->server_addr, sizeof(c->server_addr)) == -1) {

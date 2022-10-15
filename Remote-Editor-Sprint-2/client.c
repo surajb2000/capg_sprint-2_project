@@ -92,9 +92,9 @@ int main() {
         /* authenticate user */
         if (AuthenticateUser(username, password, &client)) {
             if (strcmp(username, "anonymous") != 0)
-                printf("AUTHENTICATED\n");
+                printf("\n......AUTHENTICATED......\n");
             else {
-                printf("\nAnonymous\n");
+                printf("\n......Anonymous......\n");
             }
             while (1) {
                 /* get user input */

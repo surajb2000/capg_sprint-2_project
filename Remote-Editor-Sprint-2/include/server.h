@@ -26,7 +26,7 @@ int LoadUsersData(ser *);
 int AcceptConnections(ser *);
 char *ReceiveDataFromClient(int clientfd, ser *);
 int SendDataToClient(int clientfd, const char *data);
-// int AuthenticateUser(int clientfd, const User &user);
+int AuthenticateUser(int clientfd, const user *user, ser *);
 int ListDirContents(int clientfd, const char *dir);
 int ChangeDir(const char *new_directory, user *current_user, int client_socketfd, ser *);
 int EditLine(int clientfd, const char *file, int linenum, ser *);

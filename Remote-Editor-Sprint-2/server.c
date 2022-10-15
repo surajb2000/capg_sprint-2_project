@@ -44,14 +44,13 @@ int main() {
     // create server object
     ser server;
     createServer(&server);
-    // LoadUsersData(&server);
+    LoadUsersData(&server);
     while (1) {
         // accept connection from client and store the socket descriptor
         int clientfd = AcceptConnections(&server);
         printf("Client Connected");
         // send confirmation message to client
         SendDataToClient(clientfd, "Connected to server");
-        printf("Client Connected");
         // create child process
         // pid_t pid = fork();
         // if (pid < 0) {
