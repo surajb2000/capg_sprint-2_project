@@ -159,71 +159,23 @@ int main() {
                     if (arguments == 0) {
                         SendDataToServer(command, &client);
                     } else if (arguments == 1) {
-                        //-------------C prog---------
-                        /* checks 2nd arg is a number
-                          char *token = strtok(command, " ");
-                          token=strtok(NULL," ");
-                          int num=atoi(token);
-                          if(num<=0) {
-                              printf("Value should be greater than 0");
-                          }
-                          SendDataToServer(command,&client);
-
-
-                          ------------checks both args --------
-                          char *token = strtok(command, " ");
-                          token=strtok(NULL," ");
-                          int num1=atoi(token);
-                          if(num1<=0) {
-                              printf("Value 1 should be greater than 0");
-                          }
-                          token=strtok(NULL," ");
-                          int num2=atoi(token);
-                          if(num2<=0) {
-                              printf("Value 2 should be greater than 0");
-                          }
-                          SendDataToServer(command,&client);
-                          -------------END---------------
-                          */
-                        /* check 2nd argument is a number */
+                        /* check argument is a number */
                         char *subarg1 = strtok(NULL, " ");
-                        // std::stringstream str_stream(command.substr(command.find(" ") + 1));
                         int number = atoi(subarg1);
-                        // if (str_stream.fail()) {
-                        //     std::cerr << "Value must be a number" << std::endl;
-                        //     continue;
-                        // }
                         if (number <= 0) {
-                            printf("Value should be greater than 0\n");
+                            printf("Value must be a number and should be greater than 0\n");
                             continue;
                         }
                         /* send command to server */
                         SendDataToServer(com, &client);
                     } else {
-                        /* check both 2nd and 3rd arguments are numbers */
+                        /* check both arguments are numbers */
                         char *subarg = strtok(NULL, " ");
                         int number1 = atoi(subarg);
                         subarg = strtok(NULL, " ");
                         int number2 = atoi(subarg);
-                        // std::stringstream ss1(command.substr(command.find(" ") + 1));
-                        // ss1 >> number1;
-                        //  if (ss1.fail()) {
-                        //      std::cerr << "Value 1 must be a number" << std::endl;
-                        //      continue;
-                        //  }
-                        // command = print 1 2
-                        // print\01\02;
-                        if (number1 <= 0) {
-                            printf("Value 1 should be greater than 0\n");
-                            continue;
-                        }
-                        // ss1 >> number2;
-                        // if (ss1.fail()) {
-                        //     printf("Value 2 must be a number\n");
-                        //     continue;
-                        // }
-                        if (number2 <= 0) {
-                            printf("Value 2 should be greater than 0\n");
+                        if (number1 <= 0 || number2 <= 0) {
+                            printf("Value must be a number and should be greater than 0\n");
                             continue;
                         }
                         /* send command to server */
@@ -233,12 +185,8 @@ int main() {
                     /* check whether the argument is a number */
                     char *subarg = strtok(NULL, " ");
                     int number = atoi(subarg);
-                    // if (ss3.fail()) {
-                    //     std::cerr << "Value must be a number" << std::endl;
-                    //     continue;
-                    // }
                     if (number <= 0) {
-                        printf("Value should be greater than 0\n");
+                        printf("Value must be a number and should be greater than 0\n");
                         continue;
                     }
                     SendDataToServer(com, &client);
