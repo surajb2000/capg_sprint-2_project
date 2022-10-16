@@ -5,7 +5,7 @@ flags = -lcunit -g
 objs = main.o authenticate.o authenticate_suite.o 
 
 main.c : $(objs)
-	${CC} bin/main.o bin/authenticate.o bin/authenticate_suite.o -o bin/file.tests ${flags}
+	${CC} bin/main.o bin/authenticate.o bin/authenticate_suite.o bin/load.o bin/load_suite.o -o bin/file.tests ${flags}
 	./bin/file.tests
 
 main.o: src/main.c
@@ -16,3 +16,10 @@ authenticate.o: src/authenticate.c
 
 authenticate_suite.o: src/authenticate_suite.c
 	${CC} -c src/authenticate_suite.c -o bin/authenticate_suite.o ${flags}
+
+load.o: src/load.c
+	${CC} -c src/loade.c -o bin/load.o ${flags}
+
+loade_suite.o: src/load_suite.c
+	${CC} -c src/load_suite.c -o bin/load_suite.o ${flags}
+
