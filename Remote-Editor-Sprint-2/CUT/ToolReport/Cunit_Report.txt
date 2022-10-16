@@ -1,0 +1,27 @@
+ make
+gcc -c src/main.c -o bin/main.o -lcunit -g
+gcc -c src/authenticate.c -o bin/authenticate.o -lcunit -g
+gcc -c src/authenticate_suite.c -o bin/authenticate_suite.o -lcunit -g
+gcc -c src/load.c -o bin/load.o -lcunit -g
+gcc -c src/load_suite.c -o bin/load_suite.o -lcunit -g
+gcc bin/main.o bin/authenticate.o bin/authenticate_suite.o bin/load.o bin/load_suite.o -o bin/file.tests -lcunit -g
+./bin/file.tests
+
+
+     CUnit - A unit testing framework for C - Version 2.1-3
+     http://cunit.sourceforge.net/
+
+
+Suite: Suite Authenticate file
+  Test: test of authenticate() in Sunny cases ...passed
+  Test: test of authenticate() in Rainy cases ...passed
+Suite: Suite Load file
+  Test: test of load() in Sunny cases ...passed
+  Test: test of load() in Rainy cases ...passed
+
+Run Summary:    Type  Total    Ran Passed Failed Inactive
+              suites      2      2    n/a      0        0
+               tests      4      4      4      0        0
+             asserts     12     12     12      0      n/a
+
+Elapsed time =    0.000 seconds
