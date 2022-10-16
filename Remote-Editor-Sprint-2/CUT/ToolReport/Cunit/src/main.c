@@ -29,7 +29,7 @@ int main() {
     }
 
     // Add the tests to the suite
-    if ((NULL == CU_add_test(pSuite2, "test of load() in Sunny cases", testSunnyCases2)) || (NULL == CU_add_test(pSuite1, "test of load() in Rainy cases", testRainyCases2))) {
+    if ((NULL == CU_add_test(pSuite2, "test of load() in Sunny cases", testSunnyCases2)) || (NULL == CU_add_test(pSuite2, "test of load() in Rainy cases", testRainyCases2))) {
         CU_cleanup_registry();
         return CU_get_error();
     }
