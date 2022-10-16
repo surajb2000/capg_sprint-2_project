@@ -10,12 +10,12 @@ int clean_suite_authenticate(void) {
 }
 
 void testSunnyCases1(void) {
-    CU_ASSERT_EQUAL(authentication("data/usercu.txt","nikita","nikita15"), 2);
-    CU_ASSERT_EQUAL(authentication("data/usercu.txt","suraj","suraj25"), 2);
-    CU_ASSERT_EQUAL(authentication("data/usercu.txt","dinesh","dinesh16"), 2);
+    CU_ASSERT_EQUAL(authentication("data/usercu.txt", "nikita", "nikita15"), 2);
+    CU_ASSERT_EQUAL(authentication("data/usercu.txt", "suraj", "suraj25"), 2);
+    CU_ASSERT_EQUAL(authentication("data/usercu.txt", "dinesh", "dinesh16"), 2);
 }
 void testRainyCases1(void) {
-    CU_ASSERT_EQUAL(authentication("data/usercu.txt","anony","anony"), 1);
-    CU_ASSERT_EQUAL(authentication("data/usercu.txt","author","author23"), 1);
-    CU_ASSERT_EQUAL(authentication("data/usercu.txt","ruby","ruby7"), 1);
+    CU_ASSERT_EQUAL(authentication("data/usercu.txt", "anony", "anony"), 1);
+    CU_ASSERT_EQUAL(authentication("data/usercu.txt", "author", "author23"), 1);
+    CU_ASSERT_EQUAL(authentication("data/usercu.txt", "ruby", "ruby7"), 1);
 }

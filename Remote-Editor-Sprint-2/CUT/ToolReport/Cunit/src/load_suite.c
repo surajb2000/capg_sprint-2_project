@@ -10,12 +10,12 @@ int clean_suite_load(void) {
 }
 ser server;
 void testSunnyCases2(void) {
-    CU_ASSERT_EQUAL(LoadUsersData(&server,"data/usercu.txt"), 1);
-    CU_ASSERT_EQUAL(LoadUsersData(&server,"data/usercu.txt"), 1);
-    CU_ASSERT_EQUAL(LoadUsersData(&server,"data/usercu.txt"), 1);
+    CU_ASSERT_EQUAL(LoadUsersData(&server, "data/usercu.txt"), 1);
+    CU_ASSERT_EQUAL(LoadUsersData(&server, "data/usercu.txt"), 1);
+    CU_ASSERT_EQUAL(LoadUsersData(&server, "data/usercu.txt"), 1);
 }
-void testRainyCases2(void) {
-    CU_ASSERT_EQUAL(LoadUsersData(&server,"data/usercv.txt"), 0);
-    CU_ASSERT_EQUAL(LoadUsersData(&server,"data/usercl.txt"), 0);
-    CU_ASSERT_EQUAL(LoadUsersData(&server,"data/usercd.txt"), 0);
+void testRainyCases2s(void) {
+    CU_ASSERT_EQUAL(LoadUsersData(&server, "data/usercv.txt"), 0);
+    CU_ASSERT_EQUAL(LoadUsersData(&server, "data/usercl.txt"), 0);
+    CU_ASSERT_EQUAL(LoadUsersData(&server, "data/usercd.txt"), 0);
 }

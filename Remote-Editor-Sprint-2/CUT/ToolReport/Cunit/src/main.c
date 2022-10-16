@@ -1,8 +1,7 @@
-#include <CUnit/Basic.h>
-//#include "../include/authenticate.h"
 #include "../include/authenticate_suite.h"
-//#include "../include/load.h"
 #include "../include/load_suite.h"
+#include <CUnit/Basic.h>
+
 int main() {
     /* initialize the CUnit test registry */
     if (CUE_SUCCESS != CU_initialize_registry())
@@ -29,7 +28,7 @@ int main() {
         return CU_get_error();
     }
 
-    // Add the tests to the suite 
+    // Add the tests to the suite
     if ((NULL == CU_add_test(pSuite2, "test of load() in Sunny cases", testSunnyCases1)) || (NULL == CU_add_test(pSuite1, "test of load() in Rainy cases", testRainyCases1))) {
         CU_cleanup_registry();
         return CU_get_error();
