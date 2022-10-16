@@ -1,4 +1,4 @@
-/*#ifndef LOAD_H_
+#ifndef LOAD_H_
 #define Load_H_
 #define SIZE 500
 typedef struct User {

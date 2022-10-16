@@ -69,7 +69,9 @@ int LoadUsersData(ser *ser) {
         token = strtok(NULL, " ");
         strcpy(password, token);
         password[strlen(password) - 1] = '\0';
-
+        if(password[strlen(password)-1]=='\r') {
+            password[strlen(password) - 1] = '\0';
+        }
         strcpy(ser->users[ser->n].name, name);
         strcpy(ser->users[ser->n].password, password);
         ser->n++;

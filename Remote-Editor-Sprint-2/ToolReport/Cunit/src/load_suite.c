@@ -1,4 +1,4 @@
-/*#include "../include/load.h"
+#include "../include/load.h"
 #include "CUnit/Basic.h"
 
 int init_suite_load(void) {
@@ -18,4 +18,4 @@ void testRainyCases1(void) {
     CU_ASSERT_EQUAL(LoadUsersData(&server,"data/usercv.txt"), 0);
     CU_ASSERT_EQUAL(LoadUsersData(&server,"data/usercl.txt"), 0);
     CU_ASSERT_EQUAL(LoadUsersData(&server,"data/usercd.txt"), 0);
-}*/
+}

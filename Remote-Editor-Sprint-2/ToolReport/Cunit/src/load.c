@@ -1,4 +1,4 @@
-/*#include "../include/load.h"
+#include "../include/load.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -43,4 +43,4 @@ int LoadUsersData(ser *ser, char *filename) {
     }
     fclose(file);
     return flag;
-}*/
+}

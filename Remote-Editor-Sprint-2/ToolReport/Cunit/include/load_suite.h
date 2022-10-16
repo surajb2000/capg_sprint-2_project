@@ -1,4 +1,4 @@
-/*#ifndef LOAD_SUITE_H_
+#ifndef LOAD_SUITE_H_
 #define LOAD_SUITE_H_
 
 #include <CUnit/Basic.h>
