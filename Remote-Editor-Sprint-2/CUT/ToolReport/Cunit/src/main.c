@@ -1,8 +1,7 @@
 #include <CUnit/Basic.h>
-
-#include "../include/authenticate.h"
+//#include "../include/authenticate.h"
 #include "../include/authenticate_suite.h"
-#include "../include/load.h"
+//#include "../include/load.h"
 #include "../include/load_suite.h"
 int main() {
     /* initialize the CUnit test registry */

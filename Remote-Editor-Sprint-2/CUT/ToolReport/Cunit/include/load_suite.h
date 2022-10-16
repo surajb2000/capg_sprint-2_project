@@ -2,7 +2,7 @@
 #define LOAD_SUITE_H_
 
 #include <CUnit/Basic.h>
-#include "load.h"
+//#include "load.h"
 
 int init_suite_load(void);
 int clean_suite_load(void);
