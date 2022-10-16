@@ -1,0 +1,16 @@
+gcov a-client.gcno
+File 'client.c'
+Lines executed:71.43% of 140
+Creating 'client.c.gcov'
+
+Lines executed:71.43% of 140
+
+
+
+
+gcov a-clientFunctions.gcno
+File 'clientFunctions.c'
+Lines executed:72.84% of 81
+Creating 'clientFunctions.c.gcov'
+
+Lines executed:72.84% of 81
