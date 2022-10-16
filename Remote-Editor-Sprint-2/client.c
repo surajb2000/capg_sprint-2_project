@@ -56,7 +56,7 @@ int main() {
     while (1) {
         c client;
         CreateSocket(&client);
-        sockid = GetSocketfd(&client);
+        sockid = client.socketfd;
 
         /* register the signal handler for ctrl+c */
         signal(SIGINT, signalHandler);

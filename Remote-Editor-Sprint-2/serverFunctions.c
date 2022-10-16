@@ -47,9 +47,6 @@ int createServer(ser *ser) {
         perror("listen");
         exit(EXIT_FAILURE);
     }
-    // strcpy(ser->users[ser->n].name, "anonymous");
-    // strcpy(ser->users[ser->n].password, "password");
-    // ser->n += 1;
 }
 
 int LoadUsersData(ser *ser) {
@@ -57,8 +54,8 @@ int LoadUsersData(ser *ser) {
     /* read data from ../data/users.txt file and store it in users vector */
     FILE *file;
     char line[100];
-    char users_file[100] = USERS;
-    char name[100], password[100], dir[100];
+    char users_file[10] = USERS;
+    char name[100], password[100];
 
     char f[100] = DATA_DIR;
     strcat(f, users_file);
