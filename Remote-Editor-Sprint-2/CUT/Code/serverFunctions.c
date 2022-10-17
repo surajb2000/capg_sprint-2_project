@@ -10,6 +10,7 @@
 #define DATA_DIR "./data/"
 #define USERS "users.txt"
 
+#define PORT 8021
 /*
  * This is the constructor for the server class.
  * It is responsible for initializing the server.
@@ -18,6 +19,8 @@ int createServer(ser *ser) {
     ser->socketfd = 0;
     ser->client_addr_size = sizeof(ser->client_addr);
     ser->n = 0;
+    ser->s = 0;
+
     /* create socket */
     ser->socketfd = socket(AF_INET, SOCK_STREAM, 0);
     // ser->socketfd = socket(AF_INET, SO_REUSEADDR, 0);
@@ -31,7 +34,7 @@ int createServer(ser *ser) {
     }
     /* initialize server address */
     ser->server_addr.sin_family = AF_INET;
-    ser->server_addr.sin_port = htons(8021);
+    ser->server_addr.sin_port = htons(PORT);
     ser->server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
 
     /* bind socket to server address */
@@ -69,7 +72,7 @@ int LoadUsersData(ser *ser) {
         token = strtok(NULL, " ");
         strcpy(password, token);
         password[strlen(password) - 1] = '\0';
-        if(password[strlen(password)-1]=='\r') {
+        if (password[strlen(password) - 1] == '\r') {
             password[strlen(password) - 1] = '\0';
         }
         strcpy(ser->users[ser->n].name, name);
@@ -91,6 +94,8 @@ int AcceptConnections(ser *ser) {
         perror("accept");
         return -1;
     }
+    ser->s++;
+    printf("Client with id %d Connected\n", ser->s);
     return client_socketfd;
 }
 
@@ -300,7 +305,6 @@ int EditLine(int client_socketfd, const char *filename, int line_number, ser *se
     char line[1000] = "";
     int i = 0;
     while (fgets(line, 1000, f)) {
-        printf("entered");
         strcpy(lines[i], line);
         i++;
         // lines.push_back(line);

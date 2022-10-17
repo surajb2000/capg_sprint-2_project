@@ -12,29 +12,7 @@
 
 #define DATA_DIR "../data/"
 #define USERS "users.txt"
-#define PORT 8021
-
-/*
-
-struct sockaddr_in server; // This is our main socket variable.
-int fd;                    // This is the socket file descriptor that will be used to identify the socket
-int conn;                  // This is the connection file descriptor that will be used to distinguish client connections.
-char message[100] = "";    // This array will store the messages that are sent by the server
-
-int main() {
-    fd = socket(AF_INET, SOCK_STREAM, 0);
-    server.sin_family = AF_INET;
-    server.sin_port = htons(8012);
-    inet_pton(AF_INET, "127.0.0.1", &server.sin_addr);       // This binds the client to localhost
-    connect(fd, (struct sockaddr *)&server, sizeof(server)); // This connects the client to the server.
-    while (1) {
-        printf("Enter a message: ");
-        fgets(message, 100, stdin);
-        send(fd, message, strlen(message), 0);
-        // An extra breaking condition can be added here (to terminate the while loop)
-    }
-}
-*/
+#define PORT 8012
 
 /*
  * This is the source code for the client program.
@@ -235,10 +213,20 @@ int main() {
                 }
             }
         } else {
-            printf("AUTHENTICATION_FAILED try again...\n");
+            printf("\n...AUTHENTICATION_FAILED try again...\n");
             DisconnectClient(&client);
+            continue;
         }
-
         return 0;
+        // char exit = '1';
+        // printf("Enter 0 to exit or any other key to continue : ");
+        // scanf("%c",&exit);
+        // getchar();
+        // if (exit == '0') {
+        //     return 0;
+        // } else {
+        //     system("clear");
+        // }
     }
+    
 }

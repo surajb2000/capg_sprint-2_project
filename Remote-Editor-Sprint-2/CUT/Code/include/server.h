@@ -18,6 +18,7 @@ typedef struct Server {
     socklen_t client_addr_size;
     user users[100];
     int n;
+    int s;
     char buffer[MAX_SIZE];
 } ser;
 
