@@ -10,7 +10,7 @@
 #define DATA_DIR "./data/"
 #define USERS "users.txt"
 
-#define PORT 8021
+#define PORT 8011
 /*
  * This is the constructor for the server class.
  * It is responsible for initializing the server.
