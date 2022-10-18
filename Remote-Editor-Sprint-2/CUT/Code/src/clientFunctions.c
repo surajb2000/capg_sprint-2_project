@@ -1,5 +1,3 @@
-/*-------------------------START OF Client.cpp----------------------------*/
-
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <signal.h>
@@ -9,7 +7,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#include "./include/client.h"
+#include "../include/client.h"
 
 #define PORT 8011
 #define IP "127.0.0.1"

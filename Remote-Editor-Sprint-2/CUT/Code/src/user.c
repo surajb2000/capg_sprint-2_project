@@ -1,13 +1,10 @@
-/* This is the user class's implementation of member functions. */
-
-#include "./include/user.h"
 #include <stdio.h>
+
+#include "../include/user.h"
 
 #define DIR "./data/home/"
 
-/*
- * Constructor for the user class.
- */
+
 void User(const char *name, const char *password, user *u) {
     char dir[100] = "";
     strcpy(dir, DIR);

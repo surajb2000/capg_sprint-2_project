@@ -4,17 +4,14 @@
 #include <string.h>
 #include <sys/socket.h>
 
-#include "./include/server.h"
-#include "./include/user.h"
+#include "../include/server.h"
+#include "../include/user.h"
 
 #define DATA_DIR "./data/"
 #define USERS "users.txt"
 
 #define PORT 8011
-/*
- * This is the constructor for the server class.
- * It is responsible for initializing the server.
- */
+
 int createServer(ser *ser) {
     ser->socketfd = 0;
     ser->client_addr_size = sizeof(ser->client_addr);
@@ -53,7 +50,7 @@ int createServer(ser *ser) {
 
 int LoadUsersData(ser *ser) {
 
-    /* read data from ../data/users.txt file and store it in users vector */
+    /* read data from ../data/users.txt file and store it in array */
     FILE *file;
     char line[100];
     char users_file[10] = USERS;
@@ -132,7 +129,7 @@ int SendDataToClient(int client_socketfd, const char *data) {
  */
 
 int AuthenticateUser(int client_socketfd, const user *current_user, ser *ser) {
-    /* check whether user is present in users vector */
+    /* check whether user is present in users array */
     int n = ser->n;
     for (int i = 0; i < n; i++) {
         if (strcmp(ser->users[i].name, current_user->name) == 0 && strcmp(ser->users[i].password, current_user->password) == 0) {
@@ -167,16 +164,12 @@ int ListDirContents(int client_socketfd, const char *directory) {
                     strcat(filename, ent->d_name);
                     strcat(filename, "/\n");
                     strcat(buffer, filename);
-                    // filename = "d\t" + (char)ent->d_name + "/\n";
-                    // buffer += filename;
                 }
             } else if (ent->d_type == DT_REG) {
                 strcpy(filename, "-\t");
                 strcat(filename, ent->d_name);
                 strcat(filename, "\n");
                 strcat(buffer, filename);
-                // filename = "-\t" + std::string(ent->d_name) + "\n";
-                // buffer += filename;
             }
         }
         /* remove the last newline character */
@@ -237,9 +230,6 @@ int ChangeDir(const char *new_directory, user *current_user, int client_socketfd
                         break;
                     }
                 }
-                //./data/home/suraj/some
-                //./data/home/suraj
-                // ChangeUserDir(current_user, temp);
                 /* send success message to client */
                 send(client_socketfd, "DIRECTORY_CHANGED", sizeof("DIRECTORY_CHANGED"), 0);
                 closedir(dir);
@@ -289,13 +279,12 @@ int SelectFile(char *filename, const char *dirname, int client_socketfd) {
  */
 int EditLine(int client_socketfd, const char *filename, int line_number, ser *ser) {
     /* open file in read mode at line_number line */
-    // std::ifstream file(filename);
     FILE *f = fopen(filename, "r");
     if (f == NULL) {
         SendDataToClient(client_socketfd, "FILE_NOT_FOUND");
         return -1;
     }
-    /* store the file in a vector */
+    /* store the file in a array */
     char lines[100][1000];
     for (int i = 0; i < 100; i++) {
         memset(lines[i], 0, sizeof(lines[i]));
@@ -306,13 +295,10 @@ int EditLine(int client_socketfd, const char *filename, int line_number, ser *se
     while (fgets(line, 1000, f)) {
         strcpy(lines[i], line);
         i++;
-        // lines.push_back(line);
     }
     /* close file */
-    // file.close();
-    /* check whether line_number is valid */
-    // fseek(f, 0, SEEK_SET);
     fclose(f);
+
     if (line_number > i) {
         /* send failure message to client */
         SendDataToClient(client_socketfd, "INVALID_LINE_NUMBER");
@@ -320,7 +306,6 @@ int EditLine(int client_socketfd, const char *filename, int line_number, ser *se
     }
 
     /* send the selected line with line_number to client */
-    // line.clear();
     strcpy(line, "");
     int space_count = 0;
     char ch;
@@ -333,7 +318,6 @@ int EditLine(int client_socketfd, const char *filename, int line_number, ser *se
         }
     }
     char trimmed_line[100];
-    // = lines[line_number - 1][space_count];
     strcpy(trimmed_line, lines[line_number - 1] + space_count);
     sprintf(line, "%d", line_number);
     strcat(line, ":");
@@ -346,22 +330,7 @@ int EditLine(int client_socketfd, const char *filename, int line_number, ser *se
 
     printf("Changes received from client: %s\n", ser->buffer);
 
-    // // again load the file in a vector
-    // std::ifstream file1(filename);
-    // if (!file1.is_open()) {
-    //     /* display error to stderr */
-    //     SendDataToClient(client_socketfd, "FILE_NOT_FOUND");
-    //     return -1;
-    // }
-    // std::string line1;
-    // lines.clear();
-    // while (std::getline(file1, line1)) {
-    //     lines.push_back(line1);
-    // }
-    // /* close file */
-    // file1.close();
-
-    /* replace the line in the vector */
+    /* replace the line in the array */
     if (strcmp(ser->buffer, "0") != 0) {
         strcpy(trimmed_line, "");
         while (space_count--) {
@@ -372,14 +341,6 @@ int EditLine(int client_socketfd, const char *filename, int line_number, ser *se
     }
 
     /* open file in write mode */
-    // std::ofstream file_write(filename);
-
-    // /* write the vector to file */
-    // for (auto single_line : lines) {
-    //     file_write << single_line << std::endl;
-    // }
-    // /* close file */
-    // file_write.close();
     f = fopen(filename, "w");
     for (int k = 0; k < i; k++) {
         fputs(lines[k], f);
@@ -394,7 +355,6 @@ int EditLine(int client_socketfd, const char *filename, int line_number, ser *se
 int ViewFile(int client_socketfd, const char *filename, int start_line, int end_line, ser *ser) {
     /* open file in read mode */
     FILE *f = fopen(filename, "r");
-    // std::ifstream file(filename);
     if (f == NULL) {
         /* end failure message to client */
         SendDataToClient(client_socketfd, "FILE_NOT_FOUND");
@@ -404,11 +364,6 @@ int ViewFile(int client_socketfd, const char *filename, int start_line, int end_
     // get the number of lines in the file
     char line[100] = "";
     int line_number = 0;
-    // std::ifstream file_read(filename);
-    //  while (std::getline(file_read, line)) {
-    //      line_number++;
-    //  }
-    //  file_read.close();
     while (fgets(line, 100, f)) {
         line_number++;
     }
@@ -433,13 +388,10 @@ int ViewFile(int client_socketfd, const char *filename, int start_line, int end_
                 /* send line with line number to client */
                 char line_with_number[1000];
                 char temp[100];
-                // itoa(i,temp,DECIMAL);
                 sprintf(temp, "%d", i);
                 strcpy(line_with_number, temp);
                 strcat(line_with_number, " ");
-                // sprintf(temp, "%d", line);
                 strcat(line_with_number, line);
-                // strcat(line_with_number, "\n");
                 SendDataToClient(client_socketfd, line_with_number);
                 if (end_line != -1 && i == end_line) {
                     fclose(f);

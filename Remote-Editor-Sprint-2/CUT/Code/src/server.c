@@ -1,5 +1,3 @@
-#include "./include/server.h"
-#include "./include/user.h"
 #include <netinet/in.h>
 #include <signal.h>
 #include <stdio.h>
@@ -7,6 +5,9 @@
 #include <string.h>
 #include <sys/socket.h> //For Sockets
 #include <unistd.h>     //for fork
+
+#include "../include/server.h"
+#include "../include/user.h"
 
 /* TCP server driver program */
 

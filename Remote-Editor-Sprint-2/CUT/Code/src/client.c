@@ -1,4 +1,3 @@
-#include "./include/client.h"
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <signal.h>
@@ -9,6 +8,8 @@
 #include <sys/types.h>
 #include <termios.h>
 #include <unistd.h>
+
+#include "../include/client.h"
 
 #define DATA_DIR "../data/"
 #define USERS "users.txt"
@@ -94,7 +95,7 @@ int main() {
                     arguments++;
                     token = strtok(NULL, " ");
                 }
-                /* remove trailing space */
+                /* remove trailing newline */
                 command[strlen(command) - 1] = '\0';
                 char com[100] = "";
                 strcpy(com, command);
@@ -228,5 +229,4 @@ int main() {
         //     system("clear");
         // }
     }
-    
 }
