@@ -5,7 +5,6 @@
 
 #define DIR "./data/home/"
 
-
 void User(const char *name, const char *password, user *u) {
     char dir[100] = "";
     strcpy(dir, DIR);

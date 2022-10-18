@@ -10,7 +10,7 @@
 
 #define DATA_DIR "./data/"
 #define USERS "users.txt"
-
+#define MAX_STRING_SIZE 100
 #define PORT 8011
 
 int createServer(ser *ser) {
@@ -53,17 +53,16 @@ int LoadUsersData(ser *ser) {
 
     /* read data from ../data/users.txt file and store it in array */
     FILE *file;
-    char line[100];
-    char users_file[10] = USERS;
-    char name[100], password[100];
+    char line[MAX_STRING_SIZE];
+    char name[MAX_STRING_SIZE], password[MAX_STRING_SIZE];
 
-    char f[100] = DATA_DIR;
-    strcat(f, users_file);
+    char f[MAX_STRING_SIZE] = DATA_DIR;
+    strcat(f, USERS);
 
     file = fopen(f, "r");
     if (file == NULL)
         return -1;
-    while (fgets(line, 100, file)) {
+    while (fgets(line, MAX_STRING_SIZE, file)) {
         char *token = strtok(line, " ");
         strcpy(name, token);
         token = strtok(NULL, " ");
@@ -151,7 +150,7 @@ int AuthenticateUser(int client_socketfd, const user *current_user, ser *ser) {
 int ListDirContents(int client_socketfd, const char *directory) {
     /* list directory contents */
     DIR *dir;
-    char buffer[1000] = {"\0"}, filename[1000] = {"\0"};
+    char buffer[MAX_SIZE] = {"\0"}, filename[MAX_SIZE] = {"\0"};
     dir = opendir(directory);
     if (dir != NULL) {
         struct dirent *ent;
@@ -203,7 +202,7 @@ int ChangeDir(const char *new_directory, user *current_user, int client_socketfd
         while ((ent = readdir(dir)) != NULL) {
             if (ent->d_type == DT_DIR && strcmp(ent->d_name, new_directory) == 0 && strcmp(new_directory, "..") != 0 && strcmp(new_directory, ".") != 0) {
                 /* change directory to new directory */
-                char temp[100] = "";
+                char temp[MAX_STRING_SIZE] = "";
                 strcpy(temp, current_user->dir);
                 strcat(temp, "/");
                 strcat(temp, new_directory);
@@ -214,7 +213,7 @@ int ChangeDir(const char *new_directory, user *current_user, int client_socketfd
                 return 0;
             } else if (strcmp(new_directory, "..") == 0 || strcmp(new_directory, "../") == 0) {
                 /* change directory and restrict user to go beyond the ../data/home/username directory */
-                char temp[100] = "";
+                char temp[MAX_STRING_SIZE] = "";
                 strcpy(temp, "./data/home/");
                 strcat(temp, current_user->name);
                 if (strcmp(current_user->dir, temp) == 0) {
@@ -255,7 +254,7 @@ int SelectFile(char *filename, const char *dirname, int client_socketfd) {
         while ((ent = readdir(dir)) != NULL) {
             if (ent->d_type == DT_REG && strcmp(ent->d_name, filename) == 0) {
                 /* set the filename to fully qualified path */
-                char new[100] = "";
+                char new[MAX_STRING_SIZE] = "";
                 strcpy(new, dirname);
                 strcat(new, "/");
                 strcat(new, filename);
@@ -286,14 +285,14 @@ int EditLine(int client_socketfd, const char *filename, int line_number, ser *se
         return -1;
     }
     /* store the file in a array */
-    char lines[100][1000];
-    for (int i = 0; i < 100; i++) {
+    char lines[MAX_STRING_SIZE][MAX_SIZE];
+    for (int i = 0; i < MAX_STRING_SIZE; i++) {
         memset(lines[i], 0, sizeof(lines[i]));
     }
     // fseek(f, 0, SEEK_SET);
-    char line[1000] = "";
+    char line[MAX_SIZE] = "";
     int i = 0;
-    while (fgets(line, 1000, f)) {
+    while (fgets(line, MAX_SIZE, f)) {
         strcpy(lines[i], line);
         i++;
     }
@@ -318,7 +317,7 @@ int EditLine(int client_socketfd, const char *filename, int line_number, ser *se
             break;
         }
     }
-    char trimmed_line[100];
+    char trimmed_line[MAX_STRING_SIZE];
     strcpy(trimmed_line, lines[line_number - 1] + space_count);
     sprintf(line, "%d", line_number);
     strcat(line, ":");
@@ -363,9 +362,9 @@ int ViewFile(int client_socketfd, const char *filename, int start_line, int end_
     }
 
     // get the number of lines in the file
-    char line[100] = "";
+    char line[MAX_STRING_SIZE] = "";
     int line_number = 0;
-    while (fgets(line, 100, f)) {
+    while (fgets(line, MAX_STRING_SIZE, f)) {
         line_number++;
     }
     fseek(f, 0, SEEK_SET);
@@ -373,8 +372,8 @@ int ViewFile(int client_socketfd, const char *filename, int start_line, int end_
     /* check whether start_line and end_line is valid */
     if (end_line > line_number || start_line > line_number) {
         // send the failure msg with start and end line of the file to client
-        char msg[100] = "INVALID_LINE_NUMBER : Choose between 1 and ";
-        char temp[100] = "";
+        char msg[MAX_STRING_SIZE] = "INVALID_LINE_NUMBER : Choose between 1 and ";
+        char temp[MAX_STRING_SIZE] = "";
         sprintf(temp, "%d", line_number);
         strcat(msg, temp);
         SendDataToClient(client_socketfd, msg);
@@ -384,11 +383,11 @@ int ViewFile(int client_socketfd, const char *filename, int start_line, int end_
         /* read file contents and send it to the client */
         strcpy(line, "");
         int i = 1;
-        while (fgets(line, 100, f)) {
+        while (fgets(line, MAX_STRING_SIZE, f)) {
             if (i >= start_line) {
                 /* send line with line number to client */
-                char line_with_number[1000];
-                char temp[100];
+                char line_with_number[MAX_SIZE];
+                char temp[MAX_STRING_SIZE];
                 sprintf(temp, "%d", i);
                 strcpy(line_with_number, temp);
                 strcat(line_with_number, " ");

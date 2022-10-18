@@ -10,6 +10,8 @@
 #include <server.h>
 #include <user.h>
 
+#define MAX_STRING_SIZE 100
+
 /* TCP server driver program */
 
 void signalHandler(int signum) {
@@ -39,9 +41,9 @@ int main() {
 
         else if (pid == 0) {
             //  receive data from client
-            char data[100] = "";
+            char data[MAX_STRING_SIZE] = "";
             strcpy(data, ReceiveDataFromClient(clientfd, &server));
-            char command[100] = "", name[100] = "", password[100] = "", dir[100] = "", filename[100] = "";
+            char command[MAX_STRING_SIZE] = "", name[MAX_STRING_SIZE] = "", password[MAX_STRING_SIZE] = "", dir[MAX_STRING_SIZE] = "", filename[MAX_STRING_SIZE] = "";
             char *token = strtok(data, " ");
             token != NULL ? strcpy(command, token) : strcpy(command, "bye");
             token = strtok(NULL, " ");
@@ -87,7 +89,7 @@ int main() {
                     } else if (strcmp(command, "pwd") == 0) {
                         SendDataToClient(clientfd, dir);
                     } else if (strcmp(command, "cd") == 0) {
-                        char new_dir[100] = "";
+                        char new_dir[MAX_STRING_SIZE] = "";
                         token = strtok(NULL, " ");
                         if (token != NULL)
                             strcpy(new_dir, token);

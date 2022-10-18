@@ -75,7 +75,7 @@ int AuthenticateUser(char *username, char *password, c *c) {
         exit(EXIT_FAILURE);
     }
     /* authenticate user */
-    char data[100] = "AUTHENTICATE ";
+    char data[MAX_SIZE] = "AUTHENTICATE ";
     strcat(data, username);
     strcat(data, " ");
     strcat(data, password);
@@ -113,9 +113,9 @@ int EditLine(c *c) {
     printf("%s", c->buffer);
 
     /* ask user to edit the line received from server and send it to server */
-    char edited_line[1000];
+    char edited_line[MAX_SIZE];
     printf("Enter changes to the line: ");
-    fgets(edited_line, 1000, stdin);
+    fgets(edited_line, MAX_SIZE, stdin);
     if (strlen(edited_line) == 0)
         SendDataToServer("0", c);
     else

@@ -12,9 +12,6 @@
 /*user defined headers*/
 #include <client.h>
 
-#define DATA_DIR "../data/"
-#define USERS "users.txt"
-#define PORT 8012
 #define MAXSIZE 100
 
 /*

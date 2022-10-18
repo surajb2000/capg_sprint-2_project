@@ -1,15 +1,8 @@
-/*
- * This class file stores the TCP/IP connection information.
- * It also stores the collection of users and blacklisted ips.
- * It is used for TCP server program.
- */
-
 #ifndef SERVER_H
 #define SERVER_H
 
 #include "user.h"
 #include <netinet/in.h>
-//#include <vector>
 #define MAX_SIZE 1024
 
 typedef struct Server {
