@@ -127,6 +127,7 @@ int main() {
                     }
                 }
             } else {
+                close(clientfd);
                 fflush(stdout);
                 printf("Authentication Failed for client %d\n", server.s);
                 exit(0);
