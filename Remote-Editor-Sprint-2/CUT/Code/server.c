@@ -87,7 +87,8 @@ int main() {
                     } else if (strcmp(command, "cd") == 0) {
                         char new_dir[100] = "";
                         token = strtok(NULL, " ");
-                        strcpy(new_dir, token);
+                        if (token != NULL)
+                            strcpy(new_dir, token);
                         ChangeDir(new_dir, &current_user, clientfd, &server);
                     } else if (strcmp(command, "edit") == 0) {
                         int line_number;
