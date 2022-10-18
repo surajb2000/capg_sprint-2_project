@@ -1,6 +1,7 @@
 #include <stdio.h>
 
-#include "../include/user.h"
+/*user defined headers*/
+#include <user.h>
 
 #define DIR "./data/home/"
 

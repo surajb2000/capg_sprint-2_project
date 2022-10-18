@@ -6,8 +6,9 @@
 #include <sys/socket.h> //For Sockets
 #include <unistd.h>     //for fork
 
-#include "../include/server.h"
-#include "../include/user.h"
+/*user defined headers*/
+#include <server.h>
+#include <user.h>
 
 /* TCP server driver program */
 

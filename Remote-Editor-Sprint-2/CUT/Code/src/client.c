@@ -9,11 +9,13 @@
 #include <termios.h>
 #include <unistd.h>
 
-#include "../include/client.h"
+/*user defined headers*/
+#include <client.h>
 
 #define DATA_DIR "../data/"
 #define USERS "users.txt"
 #define PORT 8012
+#define MAXSIZE 100
 
 /*
  * This is the source code for the client program.
@@ -48,9 +50,9 @@ int main() {
 
         /*
         /* get username and password from user */
-        char username[100] = "", password[100] = "";
+        char username[MAXSIZE] = "", password[MAXSIZE] = "";
         printf("\nEnter username: ");
-        fgets(username, 100, stdin);
+        fgets(username, MAXSIZE, stdin);
         username[strlen(username) - 1] = '\0';
 
         struct termios oldt;
@@ -59,7 +61,7 @@ int main() {
         newt.c_lflag &= ~ECHO;
         tcsetattr(STDIN_FILENO, TCSANOW, &newt);
         printf("Enter password: ");
-        fgets(password, 100, stdin);
+        fgets(password, MAXSIZE, stdin);
         password[strlen(password) - 1] = '\0';
         tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
         int u = strcmp(username, "");
@@ -77,9 +79,9 @@ int main() {
             }
             while (1) {
                 /* get user input */
-                char input[100] = "";
+                char input[MAXSIZE] = "";
                 printf("Enter command-$: ");
-                fgets(input, 100, stdin);
+                fgets(input, MAXSIZE, stdin);
                 input[strlen(input) - 1] = '\0';
                 if (feof(stdin)) {
                     DisconnectClient(&client);
@@ -88,7 +90,7 @@ int main() {
 
                 char *token = strtok(input, " ");
                 int arguments = -1;
-                char command[100] = "";
+                char command[MAXSIZE] = "";
                 while (token != NULL) {
                     strcat(command, token);
                     strcat(command, " ");
@@ -97,7 +99,7 @@ int main() {
                 }
                 /* remove trailing newline */
                 command[strlen(command) - 1] = '\0';
-                char com[100] = "";
+                char com[MAXSIZE] = "";
                 strcpy(com, command);
 
                 /* separate command and arguments */

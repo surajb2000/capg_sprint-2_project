@@ -7,7 +7,8 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#include "../include/client.h"
+/*user defined headers*/
+#include <client.h>
 
 #define PORT 8011
 #define IP "127.0.0.1"

@@ -4,8 +4,9 @@
 #include <string.h>
 #include <sys/socket.h>
 
-#include "../include/server.h"
-#include "../include/user.h"
+/*user defined headers*/
+#include <server.h>
+#include <user.h>
 
 #define DATA_DIR "./data/"
 #define USERS "users.txt"

@@ -1,36 +1,37 @@
 CC = gcc
-serverobjs = server.o serverFunctions.o user.o
-clientobjs = client.o clientFunctions.o
-bin = ./bin
-obj = ./obj
-src = ./src
-flags = -g
+SERVEROBJ = server.o serverFunctions.o user.o
+CLIENTOBJ = client.o clientFunctions.o
+BINDIR = ./bin
+OBJDIR = ./obj
+SRCDIR = ./src
+INCDIR = ./include
+flags = -g -c -I${INCDIR}
 
-all: ${serverobjs} ${clientobjs}
-	${CC} ${obj}/server.o ${obj}/serverFunctions.o ${obj}/user.o -o ${bin}/server.out ${flags}
-	${CC} ${obj}/client.o ${obj}/clientFunctions.o -o ${bin}/client.out ${flags}
 
+all: ${SERVEROBJ} ${CLIENTOBJ}
+	${CC} ${OBJDIR}/server.o ${OBJDIR}/serverFunctions.o ${OBJDIR}/user.o -o ${BINDIR}/server.out
+	${CC} ${OBJDIR}/client.o ${OBJDIR}/clientFunctions.o -o ${BINDIR}/client.out
 
 server.o:
-	${CC} -c ${src}/server.c -o ${obj}/server.o ${flags}
+	${CC} ${flags} ${SRCDIR}/server.c -o ${OBJDIR}/server.o 
 
 serverFunctions.o:
-	${CC} -c ${src}/serverFunctions.c -o ${obj}/serverFunctions.o ${flags}
+	${CC} ${flags} ${SRCDIR}/serverFunctions.c -o ${OBJDIR}/serverFunctions.o 
 	
 user.o:
-	${CC} -c ${src}/user.c -o ${obj}/user.o ${flags}
+	${CC} ${flags} ${SRCDIR}/user.c -o ${OBJDIR}/user.o
 
 client.o:
-	${CC} -c ${src}/client.c -o ${obj}/client.o ${flags}
+	${CC} ${flags} ${SRCDIR}/client.c -o ${OBJDIR}/client.o
 
 clientFunctions.o:
-	${CC} -c ${src}/clientFunctions.c -o ${obj}/clientFunctions.o ${flags}
+	${CC} ${flags} ${SRCDIR}/clientFunctions.c -o ${OBJDIR}/clientFunctions.o
 
 runC:
-	${bin}/client.out
+	${BINDIR}/client.out
 
 runS:
-	${bin}/server.out
+	${BINDIR}/server.out
 
 clean : 
-	rm -rf ${bin}/* ${obj}/*
+	rm -rf ${BINDIR}/* ${OBJDIR}/*
