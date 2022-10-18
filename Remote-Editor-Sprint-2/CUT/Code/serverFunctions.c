@@ -23,9 +23,8 @@ int createServer(ser *ser) {
 
     /* create socket */
     ser->socketfd = socket(AF_INET, SOCK_STREAM, 0);
-    // ser->socketfd = socket(AF_INET, SO_REUSEADDR, 0);
-    int enable = 1;
-    setsockopt(ser->socketfd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(enable));
+    // int enable = 1;
+    // setsockopt(ser->socketfd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(enable));
 
     if (ser->socketfd == -1) {
         /* display error to stderr */
