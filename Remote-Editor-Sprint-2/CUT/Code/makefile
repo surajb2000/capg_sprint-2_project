@@ -3,6 +3,7 @@ serverobjs = server.o serverFunctions.o user.o
 clientobjs = client.o clientFunctions.o
 bin = ./bin
 obj = ./obj
+src = ./src
 flags = -g
 
 all: ${serverobjs} ${clientobjs}
@@ -11,25 +12,25 @@ all: ${serverobjs} ${clientobjs}
 
 
 server.o:
-	${CC} -c server.c -o ${obj}/server.o ${flags}
+	${CC} -c ${src}/server.c -o ${obj}/server.o ${flags}
 
 serverFunctions.o:
-	${CC} -c serverFunctions.c -o ${obj}/serverFunctions.o ${flags}
+	${CC} -c ${src}/serverFunctions.c -o ${obj}/serverFunctions.o ${flags}
 	
 user.o:
-	${CC} -c user.c -o ${obj}/user.o ${flags}
+	${CC} -c ${src}/user.c -o ${obj}/user.o ${flags}
 
 client.o:
-	${CC} -c client.c -o ${obj}/client.o ${flags}
+	${CC} -c ${src}/client.c -o ${obj}/client.o ${flags}
 
 clientFunctions.o:
-	${CC} -c clientFunctions.c -o ${obj}/clientFunctions.o ${flags}
+	${CC} -c ${src}/clientFunctions.c -o ${obj}/clientFunctions.o ${flags}
 
 runC:
-	./bin/client.out
+	${bin}/client.out
 
 runS:
-	./bin/server.out
+	${bin}/server.out
 
 clean : 
 	rm -rf ${bin}/* ${obj}/*
