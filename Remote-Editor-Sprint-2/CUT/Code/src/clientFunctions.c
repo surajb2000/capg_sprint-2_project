@@ -9,7 +9,7 @@
  *
  * 	Date			Name			Reason
  *
- * 27th Aug 2022		----			-----
+ * 14th Oct 2022	----			-----
  *
  *
 *********************************************/
@@ -28,7 +28,6 @@
 #define PORT 8022
 #define IP "127.0.0.1"
 
-// Initializing the client variables
 /********************************************
  * *FUNCTION NAME : CreateSocket
  *
@@ -37,8 +36,6 @@
  *
  *
  * *RETURNS       : socketfd of client
- *
- *
  *
 *********************************************/
 int CreateSocket(c *c) {
@@ -57,6 +54,7 @@ int CreateSocket(c *c) {
     c->server_addr.sin_addr.s_addr = inet_addr(IP);
     return c->socketfd;
 }
+
 /********************************************
  * *FUNCTION NAME : ConnectToServer
  *
@@ -66,8 +64,6 @@ int CreateSocket(c *c) {
  *
  *
  * *RETURNS       : isConnected value of client
- *
- *
  *
 *********************************************/
 int ConnectToServer(c *c) {
@@ -80,6 +76,7 @@ int ConnectToServer(c *c) {
     c->isConnected = 1;
     return 0;
 }
+
 /********************************************
  * *FUNCTION NAME : SendDataToServer
  *
@@ -88,8 +85,6 @@ int ConnectToServer(c *c) {
  *
  *
  * *RETURNS       : returns 0 if successfully sent
- *
- *
  *
 *********************************************/
 int SendDataToServer(char *data, c *c) {
@@ -102,6 +97,7 @@ int SendDataToServer(char *data, c *c) {
     }
     return 0;
 }
+
 /********************************************
  * *FUNCTION NAME : ReceiveDataFromServer
  *
@@ -110,8 +106,6 @@ int SendDataToServer(char *data, c *c) {
  *
  *
  * *RETURNS       : returns buffer char array of client 
- *
- *
  *
 *********************************************/
 char *ReceiveDataFromServer(c *c) {
@@ -125,6 +119,7 @@ char *ReceiveDataFromServer(c *c) {
     printf("%s\n", c->buffer);
     return c->buffer;
 }
+
 /********************************************
  * *FUNCTION NAME : AuthenticateUser
  *
@@ -139,8 +134,6 @@ char *ReceiveDataFromServer(c *c) {
  *
  *
  * *RETURNS       : returns 1 if authenticated 
- *
- *
  *
 *********************************************/
 int AuthenticateUser(char *username, char *password, c *c) {
@@ -175,6 +168,7 @@ int AuthenticateUser(char *username, char *password, c *c) {
     c->isConnected = 0;
     return 0;
 }
+
 /********************************************
  * *FUNCTION NAME : EditLine
  *
@@ -188,8 +182,6 @@ int AuthenticateUser(char *username, char *password, c *c) {
  *
  *
  * *RETURNS       : returns 0
- *
- *
  *
 *********************************************/
 int EditLine(c *c) {
@@ -214,7 +206,8 @@ int EditLine(c *c) {
     else
         SendDataToServer(edited_line, c);
     return 0;
-};
+}
+
 /********************************************
  * *FUNCTION NAME : DisconnectClient
  *
@@ -224,8 +217,6 @@ int EditLine(c *c) {
  *
  * *RETURNS       : returns 0
  *
- *
- *
 *********************************************/
 int DisconnectClient(c *c) {
     /* send "bye" to server and close the socket */
@@ -234,6 +225,7 @@ int DisconnectClient(c *c) {
     c->isConnected = 0;
     return 0;
 }
+
 /********************************************
  * *FUNCTION NAME : ReceiveFile
  *
@@ -246,8 +238,6 @@ int DisconnectClient(c *c) {
  *
  *
  * *RETURNS       : returns 0
- *
- *
  *
 *********************************************/
 int ReceiveFile(c *c) {

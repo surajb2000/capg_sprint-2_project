@@ -1,18 +1,18 @@
 /********************************************
  * *FILENAME	      : serverFunctions.c
  *
- * *DESCRITION        : This file defines the functions that are used to process our commands from 
+ * *DESCRITION        : This file defines the functions that are used to process our commands from
  *                      server end.
  *
  *
- * Revision History   :	       
+ * Revision History   :
  *
  * 	Date			Name			Reason
  *
- * 27th Aug 2022		----			-----
+ * 14th Oct 2022	----			-----
  *
  *
-*********************************************/
+ *********************************************/
 #include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,18 +27,17 @@
 #define USERS "users.txt"
 #define MAX_STRING_SIZE 100
 #define PORT 8022
+
 /********************************************
  * *FUNCTION NAME : createServer
  *
- * *DESCRIPTION   : This function is used to create a socket using socket system call 
-                    then we initialize server address then we bind the socket to server address 
+ * *DESCRIPTION   : This function is used to create a socket using socket system call
+                    then we initialize server address then we bind the socket to server address
                     at last we listen for connections
 
  *
  *
  * *RETURNS       : return socket
- *
- *
  *
 *********************************************/
 int createServer(ser *ser) {
@@ -76,20 +75,19 @@ int createServer(ser *ser) {
         exit(EXIT_FAILURE);
     }
 }
+
 /********************************************
  * *FUNCTION NAME : LoadUsersData
  *
- * *DESCRIPTION   : This function is responsible to read data from the user.txt file present inside 
- *                  data directory. After reading from the txt file we need to store it in the user 
- *                  array . The username should be stored corresponding to username char array in 
+ * *DESCRIPTION   : This function is responsible to read data from the user.txt file present inside
+ *                  data directory. After reading from the txt file we need to store it in the user
+ *                  array . The username should be stored corresponding to username char array in
  *                  user structure likewise password should also be stored.
 
 
  *
  *
  * *RETURNS       : return 0
- *
- *
  *
 *********************************************/
 int LoadUsersData(ser *ser) {
@@ -131,9 +129,7 @@ int LoadUsersData(ser *ser) {
  *
  * *RETURNS       : return client_socketfd
  *
- *
- *
-*********************************************/
+ *********************************************/
 int AcceptConnections(ser *ser) {
     /* accept connection from client */
     int client_socketfd = accept(ser->socketfd, (struct sockaddr *)&ser->client_addr, &ser->client_addr_size);
@@ -150,17 +146,15 @@ int AcceptConnections(ser *ser) {
 /********************************************
  * *FUNCTION NAME : ReceiveDataFromClient
  *
- * *DESCRIPTION   : This function is responsible to accept data from client. Using memset 
- *                  system call we initialize the buffer to 0. Then using recv system call we 
+ * *DESCRIPTION   : This function is responsible to accept data from client. Using memset
+ *                  system call we initialize the buffer to 0. Then using recv system call we
  *                  receive data and store it inside buffer.
  *
  *
  *
  * *RETURNS       : return buffer of server
  *
- *
- *
-*********************************************/
+ *********************************************/
 char *ReceiveDataFromClient(int client_socketfd, ser *ser) {
     /* receive data from client */
     memset(ser->buffer, 0, sizeof(ser->buffer));
@@ -181,9 +175,7 @@ char *ReceiveDataFromClient(int client_socketfd, ser *ser) {
  *
  * *RETURNS       : return 0
  *
- *
- *
-*********************************************/
+ *********************************************/
 int SendDataToClient(int client_socketfd, const char *data) {
     /* send data to client */
     if (send(client_socketfd, data, strlen(data), 0) == -1) {
@@ -204,9 +196,7 @@ int SendDataToClient(int client_socketfd, const char *data) {
  *
  * *RETURNS       : return 0
  *
- *
- *
-*********************************************/
+ *********************************************/
 int AuthenticateUser(int client_socketfd, const user *current_user, ser *ser) {
     /* check whether user is present in users array */
     int n = ser->n;
@@ -221,6 +211,7 @@ int AuthenticateUser(int client_socketfd, const user *current_user, ser *ser) {
     send(client_socketfd, "NOT_AUTHENTICATED", strlen("NOT_AUTHENTICATED"), 0);
     return 0;
 }
+
 /********************************************
  * *FUNCTION NAME : ListDirContents
  *
@@ -236,10 +227,7 @@ int AuthenticateUser(int client_socketfd, const user *current_user, ser *ser) {
  *
  * *RETURNS       : return 0 if successful
  *
- *
- *
 *********************************************/
-
 int ListDirContents(int client_socketfd, const char *directory) {
     /* list directory contents */
     DIR *dir;
