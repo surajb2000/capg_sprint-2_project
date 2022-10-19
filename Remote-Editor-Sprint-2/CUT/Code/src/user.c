@@ -1,9 +1,9 @@
 #include <stdio.h>
 
-#include "../include/user.h"
+/*user defined headers*/
+#include <user.h>
 
 #define DIR "./data/home/"
-
 
 void User(const char *name, const char *password, user *u) {
     char dir[100] = "";
