@@ -1,15 +1,13 @@
-/*
- * This class is used to store user data.
- */
 #ifndef USER_H
 #define USER_H
 
 #include <string.h>
+#define MAX_STRING_SIZE 100
 
 typedef struct User {
-    char name[100];
-    char password[100];
-    char dir[100];
+    char name[MAX_STRING_SIZE];
+    char password[MAX_STRING_SIZE];
+    char dir[MAX_STRING_SIZE];
 } user;
 
 void User(const char *name, const char *password,user *);
