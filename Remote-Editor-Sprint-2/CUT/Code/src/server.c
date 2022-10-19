@@ -1,3 +1,18 @@
+/********************************************
+ * *FILENAME	      : server.c
+ *
+ * *DESCRITION        : This file defines the functions that consists of various subfunctions 
+ * 			            to perform certain operations from server end. 
+ *
+ *
+ * Revision History   :	       
+ *
+ * 	Date			Name			Reason
+ *
+ * 27th Aug 2022		----			-----
+ *
+ *
+*********************************************/
 #include <netinet/in.h>
 #include <signal.h>
 #include <stdio.h>
@@ -9,7 +24,6 @@
 /*user defined headers*/
 #include <server.h>
 #include <user.h>
-
 #define MAX_STRING_SIZE 100
 
 /* TCP server driver program */

@@ -277,11 +277,25 @@ int ListDirContents(int client_socketfd, const char *directory) {
     send(client_socketfd, "NO_FILES_FOUND", sizeof("NO_FILES_FOUND"), 0);
     return -1;
 }
+/********************************************
+ * *FUNCTION NAME : ChangeDir
+ *
+ * *DESCRIPTION   : This function is responsible for handling the cd request.
+                    We are using a pointer of DIR structure to open a directory and read it.
+                    Then we are calling the the ChangeUserDir function to change the user.
+                    We are using a temp variable to store the new directory.
+                    After successfully changing the directory we are sending the message 
+                    DIRECTORY CHANGED.
 
-/*
- * This function is responsible for handling the cd request.
- */
 
+ *
+ *
+ *
+ * *RETURNS       : return 0 if successful
+ *
+ *
+ *
+*********************************************/
 int ChangeDir(const char *new_directory, user *current_user, int client_socketfd, ser *ser) {
     DIR *dir;
     if (strcmp(new_directory, "") == 0) {
@@ -335,10 +349,21 @@ int ChangeDir(const char *new_directory, user *current_user, int client_socketfd
     send(client_socketfd, "DIRECTORY_NOT_FOUND", sizeof("DIRECTORY_NOT_FOUND"), 0);
     return -1;
 }
-
-/*
- * This function is responsible for handling the select request.
- */
+/********************************************
+ * *FUNCTION NAME : SelectFile
+ *
+ * *DESCRIPTION   : This function is responsible for handling the select request.
+                    We are using a pointer of DIR structure to open a directory and read it.
+                    In the filename we are storing the complete address of file to be selected.
+                    After that we are sending the message FILE SELECTED message.
+ *
+ *
+ *
+ * *RETURNS       : return 0 if successful
+ *
+ *
+ *
+*********************************************/
 int SelectFile(char *filename, const char *dirname, int client_socketfd) {
     /* check whether file exists in current directory */
     DIR *dir;
@@ -366,10 +391,21 @@ int SelectFile(char *filename, const char *dirname, int client_socketfd) {
     send(client_socketfd, "FILE_NOT_FOUND", sizeof("FILE_NOT_FOUND"), 0);
     return -1;
 }
+/********************************************
+ * *FUNCTION NAME : EditLine
+ *
+ * *DESCRIPTION   : This function is responsible for handling the edit request.
+                    We are opening the file in read mode. Then we have temp 2D char array named lines
+                    and we are storing the contents of file. After that we are making required changes
+                    at specified line and opening the file in write mode and listing all contents.
 
-/*
- * This function is responsible for handling the edit request.
- */
+ *
+ *
+ * *RETURNS       : return 0 if successful
+ *
+ *
+ *
+*********************************************/
 int EditLine(int client_socketfd, const char *filename, int line_number, ser *ser) {
     /* open file in read mode at line_number line */
     FILE *f = fopen(filename, "r");
@@ -441,10 +477,21 @@ int EditLine(int client_socketfd, const char *filename, int line_number, ser *se
     fclose(f);
     return 0;
 }
-
-/*
- * This function is responsible for handling the print request.
- */
+/********************************************
+ * *FUNCTION NAME : ViewFile
+ *
+ * *DESCRIPTION   : This function is responsible for handling the print request.
+                    In the beginning we calculate the line numbers and then we compare the value with 
+                    start line and end line.
+                    After that in a while loop we are storing contents with line number and sending
+                    data to client.
+ *
+ *
+ * *RETURNS       : return 0 if successful
+ *
+ *
+ *
+*********************************************/
 int ViewFile(int client_socketfd, const char *filename, int start_line, int end_line, ser *ser) {
     /* open file in read mode */
     FILE *f = fopen(filename, "r");
