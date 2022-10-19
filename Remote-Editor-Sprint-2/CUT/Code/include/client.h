@@ -13,12 +13,11 @@ typedef struct Client {
 } c;
 
 int CreateSocket(c *);
-int GetSocketfd(c *);
 int ConnectToServer(c *);
-int AuthenticateUser(char *username, char *password, c *c);
 int SendDataToServer(char *data, c *c);
 char *ReceiveDataFromServer(c *c);
 int DisconnectClient(c *c);
+int AuthenticateUser(char *username, char *password, c *c);
 int EditLine(c *c);
 int ReceiveFile(c *c);
 

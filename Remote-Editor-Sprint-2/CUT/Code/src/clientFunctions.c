@@ -10,7 +10,7 @@
 /*user defined headers*/
 #include <client.h>
 
-#define PORT 8011
+#define PORT 8022
 #define IP "127.0.0.1"
 
 // Initializing the client variables

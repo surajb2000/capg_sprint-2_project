@@ -11,7 +11,7 @@
 #define DATA_DIR "./data/"
 #define USERS "users.txt"
 #define MAX_STRING_SIZE 100
-#define PORT 8011
+#define PORT 8022
 
 int createServer(ser *ser) {
     ser->socketfd = 0;

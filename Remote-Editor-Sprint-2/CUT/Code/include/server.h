@@ -16,8 +16,8 @@ typedef struct Server {
 } ser;
 
 int createServer(ser *);
-int LoadUsersData(ser *);
 int AcceptConnections(ser *);
+int LoadUsersData(ser *);
 char *ReceiveDataFromClient(int clientfd, ser *);
 int SendDataToClient(int clientfd, const char *data);
 int AuthenticateUser(int clientfd, const user *user, ser *);
