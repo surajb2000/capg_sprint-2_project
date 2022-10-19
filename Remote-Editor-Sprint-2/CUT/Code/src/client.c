@@ -1,3 +1,18 @@
+/********************************************
+ * *FILENAME	      : server.c
+ *
+ * *DESCRITION        : This file defines the functions that consists of various subfunctions 
+ * 			            to perform certain operations from client end. 
+ *
+ *
+ * Revision History   :	       
+ *
+ * 	Date			Name			Reason
+ *
+ * 27th Aug 2022		----			-----
+ *
+ *
+*********************************************/
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <signal.h>
