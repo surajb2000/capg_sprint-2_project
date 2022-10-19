@@ -1,3 +1,17 @@
+/********************************************
+ * *FILENAME	      : clientFunctions.c
+ *
+ * *DESCRITION        : This file defines the functions that are used to process our commands
+ *
+ *
+ * Revision History   :	       
+ *
+ * 	Date			Name			Reason
+ *
+ * 27th Aug 2022		----			-----
+ *
+ *
+*********************************************/
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <signal.h>
@@ -13,6 +27,18 @@
 #define IP "127.0.0.1"
 
 // Initializing the client variables
+/********************************************
+ * *FUNCTION NAME : CreateSocket
+ *
+ * *DESCRIPTION   : This function is used to create a socket using socket system call, and 
+ *                  then we initialize server address 
+ *
+ *
+ * *RETURNS       : socketfd of client
+ *
+ *
+ *
+*********************************************/
 int CreateSocket(c *c) {
     /* create socket */
     c->isConnected = 0;
@@ -29,7 +55,19 @@ int CreateSocket(c *c) {
     c->server_addr.sin_addr.s_addr = inet_addr(IP);
     return c->socketfd;
 }
-
+/********************************************
+ * *FUNCTION NAME : ConnectToServer
+ *
+ * *DESCRIPTION   : This function is responsible to connect client to server using connect system call.
+ *                  After connection we are changing the value of isConnected to 1.
+ *
+ *
+ *
+ * *RETURNS       : isConnected value of client
+ *
+ *
+ *
+*********************************************/
 int ConnectToServer(c *c) {
     /* connect to server */
     if (connect(c->socketfd, (struct sockaddr *)&c->server_addr, sizeof(c->server_addr)) == -1) {
@@ -40,7 +78,18 @@ int ConnectToServer(c *c) {
     c->isConnected = 1;
     return 0;
 }
-
+/********************************************
+ * *FUNCTION NAME : SendDataToServer
+ *
+ * *DESCRIPTION   : This function is responsible to send the data to server.
+ *
+ *
+ *
+ * *RETURNS       : returns 0 if successfully sent
+ *
+ *
+ *
+*********************************************/
 int SendDataToServer(char *data, c *c) {
     /* send data to server */
 
@@ -51,7 +100,18 @@ int SendDataToServer(char *data, c *c) {
     }
     return 0;
 }
-
+/********************************************
+ * *FUNCTION NAME : ReceiveDataFromServer
+ *
+ * *DESCRIPTION   : This function is responsible to receive data from server via the buffer char array.
+ *
+ *
+ *
+ * *RETURNS       : returns buffer char array of client 
+ *
+ *
+ *
+*********************************************/
 char *ReceiveDataFromServer(c *c) {
     memset(c->buffer, 0, sizeof(c->buffer));
     if (recv(c->socketfd, c->buffer, sizeof(c->buffer), 0) == -1) {
@@ -61,7 +121,6 @@ char *ReceiveDataFromServer(c *c) {
     }
     /* display data to stdout */
     printf("%s\n", c->buffer);
-    // std::cout << buffer << std::endl;
     return c->buffer;
 }
 
