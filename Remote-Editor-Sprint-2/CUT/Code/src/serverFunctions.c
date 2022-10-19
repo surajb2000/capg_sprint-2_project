@@ -1,3 +1,18 @@
+/********************************************
+ * *FILENAME	      : serverFunctions.c
+ *
+ * *DESCRITION        : This file defines the functions that are used to process our commands from 
+ *                      server end.
+ *
+ *
+ * Revision History   :	       
+ *
+ * 	Date			Name			Reason
+ *
+ * 27th Aug 2022		----			-----
+ *
+ *
+*********************************************/
 #include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,7 +27,20 @@
 #define USERS "users.txt"
 #define MAX_STRING_SIZE 100
 #define PORT 8022
+/********************************************
+ * *FUNCTION NAME : createServer
+ *
+ * *DESCRIPTION   : This function is used to create a socket using socket system call 
+                    then we initialize server address then we bind the socket to server address 
+                    at last we listen for connections
 
+ *
+ *
+ * *RETURNS       : return socket
+ *
+ *
+ *
+*********************************************/
 int createServer(ser *ser) {
     ser->socketfd = 0;
     ser->client_addr_size = sizeof(ser->client_addr);
@@ -48,7 +76,22 @@ int createServer(ser *ser) {
         exit(EXIT_FAILURE);
     }
 }
+/********************************************
+ * *FUNCTION NAME : LoadUsersData
+ *
+ * *DESCRIPTION   : This function is responsible to read data from the user.txt file present inside 
+ *                  data directory. After reading from the txt file we need to store it in the user 
+ *                  array . The username should be stored corresponding to username char array in 
+ *                  user structure likewise password should also be stored.
 
+
+ *
+ *
+ * *RETURNS       : return 0
+ *
+ *
+ *
+*********************************************/
 int LoadUsersData(ser *ser) {
 
     /* read data from ../data/users.txt file and store it in array */
@@ -79,9 +122,18 @@ int LoadUsersData(ser *ser) {
     return 0;
 }
 
-/*
- * This function is responsibe for accepting the client connection.
- */
+/********************************************
+ * *FUNCTION NAME : AcceptConnections
+ *
+ * *DESCRIPTION   : This function is responsible for accepting connection from client.
+ *                   Accept system call is used to perform this action.
+ *
+ *
+ * *RETURNS       : return client_socketfd
+ *
+ *
+ *
+*********************************************/
 int AcceptConnections(ser *ser) {
     /* accept connection from client */
     int client_socketfd = accept(ser->socketfd, (struct sockaddr *)&ser->client_addr, &ser->client_addr_size);
@@ -95,9 +147,20 @@ int AcceptConnections(ser *ser) {
     return client_socketfd;
 }
 
-/*
- * This receive function is responsible for receiving the data from the client.
- */
+/********************************************
+ * *FUNCTION NAME : ReceiveDataFromClient
+ *
+ * *DESCRIPTION   : This function is responsible to accept data from client. Using memset 
+ *                  system call we initialize the buffer to 0. Then using recv system call we 
+ *                  receive data and store it inside buffer.
+ *
+ *
+ *
+ * *RETURNS       : return buffer of server
+ *
+ *
+ *
+*********************************************/
 char *ReceiveDataFromClient(int client_socketfd, ser *ser) {
     /* receive data from client */
     memset(ser->buffer, 0, sizeof(ser->buffer));
@@ -109,9 +172,18 @@ char *ReceiveDataFromClient(int client_socketfd, ser *ser) {
     return ser->buffer;
 }
 
-/*
- * This function is responsible for sending data to the client.
- */
+/********************************************
+ * *FUNCTION NAME : SendDataToClient
+ *
+ * *DESCRIPTION   : This function is responsible to send data to client using send system call.
+ *
+ *
+ *
+ * *RETURNS       : return 0
+ *
+ *
+ *
+*********************************************/
 int SendDataToClient(int client_socketfd, const char *data) {
     /* send data to client */
     if (send(client_socketfd, data, strlen(data), 0) == -1) {
@@ -122,12 +194,19 @@ int SendDataToClient(int client_socketfd, const char *data) {
     return 0;
 }
 
-/*
- * This function is responsible for handling the authentication of the client.
- * It is responsible for checking if the client is authenticated or not.
- * It is responsible for checking if the client is blacklisted or not.
- */
-
+/********************************************
+ * *FUNCTION NAME : AuthenticateUser
+ *
+ * *DESCRIPTION   : This function is responsible for handling the authentication of the client.
+ *                  It is responsible for checking if the client is authenticated or not.
+ *
+ *
+ *
+ * *RETURNS       : return 0
+ *
+ *
+ *
+*********************************************/
 int AuthenticateUser(int client_socketfd, const user *current_user, ser *ser) {
     /* check whether user is present in users array */
     int n = ser->n;
@@ -142,10 +221,24 @@ int AuthenticateUser(int client_socketfd, const user *current_user, ser *ser) {
     send(client_socketfd, "NOT_AUTHENTICATED", strlen("NOT_AUTHENTICATED"), 0);
     return 0;
 }
+/********************************************
+ * *FUNCTION NAME : ListDirContents
+ *
+ * *DESCRIPTION   : This function is responsible to list down all the contents inside directory.
+                    In this function we have used DIR structure and opened and read the directory.
+                    After that by comparing the d_type value we have classified contents into further
+                    directory or files and store contents inside buffer.
+                    If the buffer is empty then we will print empty directory.
+                    If not empty then we send the data to client.
 
-/*
- * This function is responsible for handling the ls request.
- */
+ *
+ *
+ *
+ * *RETURNS       : return 0 if successful
+ *
+ *
+ *
+*********************************************/
 
 int ListDirContents(int client_socketfd, const char *directory) {
     /* list directory contents */

@@ -1,7 +1,8 @@
 /********************************************
  * *FILENAME	      : clientFunctions.c
  *
- * *DESCRITION        : This file defines the functions that are used to process our commands
+ * *DESCRITION        : This file defines the functions that are used to process our commands from 
+ *                      client end.
  *
  *
  * Revision History   :	       
@@ -124,7 +125,24 @@ char *ReceiveDataFromServer(c *c) {
     printf("%s\n", c->buffer);
     return c->buffer;
 }
-
+/********************************************
+ * *FUNCTION NAME : AuthenticateUser
+ *
+ * *DESCRIPTION   : This function is responsible to authenticate user.
+ *                  Check whether client is connected.
+                    Inside this function we are using a data variable and storing AUTHENTICATE 
+                    and then username and password.
+                    After that we are sending this data to server to process authentication at 
+                    server end.
+                    If server sends message as AUTHENTICATED in buffer then the credentials matched.
+ *
+ *
+ *
+ * *RETURNS       : returns 1 if authenticated 
+ *
+ *
+ *
+*********************************************/
 int AuthenticateUser(char *username, char *password, c *c) {
     /* check whether the client is connected to server */
     if (!c->isConnected) {
@@ -157,7 +175,23 @@ int AuthenticateUser(char *username, char *password, c *c) {
     c->isConnected = 0;
     return 0;
 }
+/********************************************
+ * *FUNCTION NAME : EditLine
+ *
+ * *DESCRIPTION   : In this function we first compare the value of buffer of client
+                    If the value is 0 then file is not selected
+                    If the value is Invalid line number then same message is shown.
+                    After that we ask the user to enter the changes in file .
+                    After we have received the input Send the Data to Server.
 
+ *
+ *
+ *
+ * *RETURNS       : returns 0
+ *
+ *
+ *
+*********************************************/
 int EditLine(c *c) {
     memset(c->buffer, 0, sizeof(c->buffer));
     int bytes_read = read(c->socketfd, c->buffer, sizeof(c->buffer));
@@ -181,7 +215,18 @@ int EditLine(c *c) {
         SendDataToServer(edited_line, c);
     return 0;
 };
-
+/********************************************
+ * *FUNCTION NAME : DisconnectClient
+ *
+ * *DESCRIPTION   : This function is responsible to send bye to server and close the socket
+ *
+ *
+ *
+ * *RETURNS       : returns 0
+ *
+ *
+ *
+*********************************************/
 int DisconnectClient(c *c) {
     /* send "bye" to server and close the socket */
     SendDataToServer("bye", c);
@@ -189,7 +234,22 @@ int DisconnectClient(c *c) {
     c->isConnected = 0;
     return 0;
 }
+/********************************************
+ * *FUNCTION NAME : ReceiveFile
+ *
+ * *DESCRIPTION   : This function is responsible to check whether file is selected or not.
+                    We receive the information in buffer.
+                    If the buffer value of c is 0 then that means FILE is not selected
+                    Otherwise File is selected.
 
+ *
+ *
+ *
+ * *RETURNS       : returns 0
+ *
+ *
+ *
+*********************************************/
 int ReceiveFile(c *c) {
     int isNotEnd = 1;
     while (isNotEnd) {
