@@ -1,5 +1,5 @@
 /********************************************
- * *FILENAME	      : server.c
+ * *FILENAME	      : client.c
  *
  * *DESCRITION        : This file defines the functions that consists of various subfunctions 
  * 			            to perform certain operations from client end. 
@@ -9,7 +9,7 @@
  *
  * 	Date			Name			Reason
  *
- * 27th Aug 2022		----			-----
+ * 13th Oct 2022	----			-----
  *
  *
 *********************************************/

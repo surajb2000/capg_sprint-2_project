@@ -265,6 +265,7 @@ int ListDirContents(int client_socketfd, const char *directory) {
     send(client_socketfd, "NO_FILES_FOUND", sizeof("NO_FILES_FOUND"), 0);
     return -1;
 }
+
 /********************************************
  * *FUNCTION NAME : ChangeDir
  *
@@ -281,9 +282,8 @@ int ListDirContents(int client_socketfd, const char *directory) {
  *
  * *RETURNS       : return 0 if successful
  *
- *
- *
 *********************************************/
+
 int ChangeDir(const char *new_directory, user *current_user, int client_socketfd, ser *ser) {
     DIR *dir;
     if (strcmp(new_directory, "") == 0) {
@@ -337,6 +337,7 @@ int ChangeDir(const char *new_directory, user *current_user, int client_socketfd
     send(client_socketfd, "DIRECTORY_NOT_FOUND", sizeof("DIRECTORY_NOT_FOUND"), 0);
     return -1;
 }
+
 /********************************************
  * *FUNCTION NAME : SelectFile
  *
@@ -348,8 +349,6 @@ int ChangeDir(const char *new_directory, user *current_user, int client_socketfd
  *
  *
  * *RETURNS       : return 0 if successful
- *
- *
  *
 *********************************************/
 int SelectFile(char *filename, const char *dirname, int client_socketfd) {
@@ -379,6 +378,7 @@ int SelectFile(char *filename, const char *dirname, int client_socketfd) {
     send(client_socketfd, "FILE_NOT_FOUND", sizeof("FILE_NOT_FOUND"), 0);
     return -1;
 }
+
 /********************************************
  * *FUNCTION NAME : EditLine
  *
@@ -390,8 +390,6 @@ int SelectFile(char *filename, const char *dirname, int client_socketfd) {
  *
  *
  * *RETURNS       : return 0 if successful
- *
- *
  *
 *********************************************/
 int EditLine(int client_socketfd, const char *filename, int line_number, ser *ser) {
@@ -476,8 +474,6 @@ int EditLine(int client_socketfd, const char *filename, int line_number, ser *se
  *
  *
  * *RETURNS       : return 0 if successful
- *
- *
  *
 *********************************************/
 int ViewFile(int client_socketfd, const char *filename, int start_line, int end_line, ser *ser) {
