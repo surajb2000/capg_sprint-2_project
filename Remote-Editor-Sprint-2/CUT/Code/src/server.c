@@ -161,5 +161,5 @@ int main() {
             close(clientfd);
         }
     }
-    return 0;
+    return EXIT_SUCCESS;
 }

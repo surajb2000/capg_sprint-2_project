@@ -232,7 +232,7 @@ int main() {
             DisconnectClient(&client);
             continue;
         }
-        return 0;
+        return EXIT_SUCCESS;
         // char exit = '1';
         // printf("Enter 0 to exit or any other key to continue : ");
         // scanf("%c",&exit);
