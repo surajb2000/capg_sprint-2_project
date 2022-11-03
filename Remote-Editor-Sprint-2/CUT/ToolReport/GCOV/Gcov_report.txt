@@ -1,10 +1,9 @@
 $ gcov a-client.gcno
 File 'src/client.c'
-Lines executed:84.51% of 142
+Lines executed:96.48% of 142
 Creating 'client.c.gcov'
 
-Lines executed:84.51% of 142
-
+Lines executed:96.48% of 142
 
 
 $ gcov a-clientFunctions.gcno
